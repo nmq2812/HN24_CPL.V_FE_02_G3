@@ -7,20 +7,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "@/app/login/page";
 import Banner from "@/components/banner";
 import axios from "axios";
+import { useState } from "react";
+import HomeTags from "@/components/homeTags";
+import ArticleList from "@/components/articleList";
+import getArticles from "@/utils/getArticles";
 
 export default function App() {
-    const apiUrl = "https://api.realworld.io/api";
-    axios
-        .get(apiUrl + "/articles")
-        .then(function (response) {
-            // xử trí khi thành công
-            console.log(response.data.articles);
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-        .finally(function () {});
-
     // Bug ở đây :))))
     // axios
     //     .post(apiUrl + "/users", {
@@ -49,6 +41,8 @@ export default function App() {
 }
 
 function Home() {
+    const [feedState, getFeedState] = useState(`global`);
+    console.log(getArticles());
     return (
         <div className="home-page">
             <Header state="home"></Header>
@@ -59,98 +53,36 @@ function Home() {
                         <div className="feed-toggle">
                             <ul className="nav nav-pills outline-active">
                                 <li className="nav-item">
-                                    <a className="nav-link disabled" href="">
+                                    <a
+                                        className={`nav-link ${
+                                            feedState === "your" ? "active" : ""
+                                        }`}
+                                        href="#"
+                                        onClick={() => getFeedState("your")}
+                                    >
                                         Your Feed
                                     </a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link active" href="">
+                                    <a
+                                        className={`nav-link ${
+                                            feedState === "global"
+                                                ? "active"
+                                                : ""
+                                        }`}
+                                        href="#"
+                                        onClick={() => getFeedState("global")}
+                                    >
                                         Global Feed
                                     </a>
                                 </li>
                             </ul>
                         </div>
 
-                        <div className="article-preview">
-                            <div className="article-meta">
-                                <a href="profile.html">
-                                    <img src="http://i.imgur.com/Qr71crq.jpg" />
-                                </a>
-                                <div className="info">
-                                    <a href="" className="author">
-                                        Eric Simons
-                                    </a>
-                                    <span className="date">January 20th</span>
-                                </div>
-                                <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                                    <i className="ion-heart"></i> 29
-                                </button>
-                            </div>
-                            <a href="" className="preview-link">
-                                <h1>How to build webapps that scale</h1>
-                                <p>This is the description for the post.</p>
-                                <span>Read more...</span>
-                            </a>
-                        </div>
-
-                        <div className="article-preview">
-                            <div className="article-meta">
-                                <a href="profile.html">
-                                    <img src="http://i.imgur.com/N4VcUeJ.jpg" />
-                                </a>
-                                <div className="info">
-                                    <a href="" className="author">
-                                        Albert Pai
-                                    </a>
-                                    <span className="date">January 20th</span>
-                                </div>
-                                <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                                    <i className="ion-heart"></i> 32
-                                </button>
-                            </div>
-                            <a href="" className="preview-link">
-                                <h1>
-                                    The song you won't ever stop singiNo matter
-                                    how hard you try.
-                                </h1>
-                                <p>This is the description for the post.</p>
-                                <span>Read more...</span>
-                            </a>
-                        </div>
+                        <ArticleList></ArticleList>
                     </div>
 
-                    <div className="col-md-3">
-                        <div className="sidebar">
-                            <p>Popular Tags</p>
-
-                            <div className="tag-list">
-                                <a href="" className="tag-pill tag-default">
-                                    programming
-                                </a>
-                                <a href="" className="tag-pill tag-default">
-                                    javascript
-                                </a>
-                                <a href="" className="tag-pill tag-default">
-                                    emberjs
-                                </a>
-                                <a href="" className="tag-pill tag-default">
-                                    angular
-                                </a>
-                                <a href="" className="tag-pill tag-default">
-                                    react
-                                </a>
-                                <a href="" className="tag-pill tag-default">
-                                    mean
-                                </a>
-                                <a href="" className="tag-pill tag-default">
-                                    node
-                                </a>
-                                <a href="" className="tag-pill tag-default">
-                                    rails
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    <HomeTags></HomeTags>
                 </div>
             </div>
             <Footer></Footer>
