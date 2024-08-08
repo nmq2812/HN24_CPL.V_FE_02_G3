@@ -1,6 +1,10 @@
+import Footer from "@/components/footer";
+import Header from "@/components/header";
+
 export default function Login() {
     return (
         <div className="auth-page">
+            <Header state="login" />
             <div className="container page">
                 <div className="row">
                     <div className="col-md-6 offset-md-3 col-xs-12">
@@ -42,6 +46,7 @@ export default function Login() {
                     </div>
                 </div>
             </div>
+            <Footer></Footer>
         </div>
     );
 }
