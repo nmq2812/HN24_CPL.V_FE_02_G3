@@ -1,31 +1,35 @@
 import Link from "next/link";
 
-export default function Header() {
+interface HeaderProps {
+    state: string;
+}
+
+export default function Header({ state }: HeaderProps) {
     return (
         <nav className="navbar navbar-light">
             <div className="container">
-                <a className="navbar-brand" href="index.html">
+                <Link className="navbar-brand" href="#">
                     conduit
-                </a>
+                </Link>
                 <ul className="nav navbar-nav pull-xs-right">
                     <li className="nav-item">
-                        <a className="nav-link active" href="">
+                        <Link className="nav-link active" href="/">
                             Home
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="">
-                            <i className="ion-compose"></i>&nbsp;New Post
-                        </a>
+                        <Link className="nav-link" href="/">
+                            <i className="ion-compose"></i>&nbsp;New Article
+                        </Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="">
+                        <Link className="nav-link" href="">
                             <i className="ion-gear-a"></i>&nbsp;Settings
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-item">
                         <Link href="/login" className="nav-link">
-                            Login
+                            Login {state}
                         </Link>
                     </li>
                 </ul>
