@@ -27,7 +27,7 @@ export default function RootLayout({
         ></link>
       </head>
       <body className={inter.className}>
-        <Header state="test"></Header>
+        <Header state="test" user={false}></Header> {/** set user=true khi da dang nhap */}
         {children}
         <Footer></Footer>
       </body>
