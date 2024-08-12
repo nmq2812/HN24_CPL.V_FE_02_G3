@@ -1,6 +1,6 @@
 import getArticles from "@/api/articles";
 
-const ArticlesList: React.FC<ArticleResponse> = async () => {
+const ArticlesList = async () => {
     const articles = await getArticles();
 
     return (

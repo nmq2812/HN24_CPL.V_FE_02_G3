@@ -1,6 +1,6 @@
 import getTags from "@/api/tags";
 
-const TagList: React.FC<Tags> = async () => {
+const TagList = async () => {
     const tags = await getTags();
     console.log(tags);
     return (

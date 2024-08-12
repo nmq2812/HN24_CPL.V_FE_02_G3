@@ -29,14 +29,14 @@ export default async function Home() {
                             </ul>
                         </div>
 
-                        <ArticleList articles={[]}></ArticleList>
+                        <ArticleList></ArticleList>
                     </div>
 
                     <div className="col-md-3">
                         <div className="sidebar">
                             <p>Popular Tags</p>
 
-                            <TagList values={[]}></TagList>
+                            <TagList></TagList>
                         </div>
                     </div>
                 </div>
