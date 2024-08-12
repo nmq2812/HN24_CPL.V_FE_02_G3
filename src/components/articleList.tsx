@@ -1,6 +1,13 @@
 import getArticles from "@/api/articles";
 
 const ArticlesList = async () => {
+    // const [articles, setArticles] = useState<Article[]>();
+    // useEffect(() => {
+    //     (async function () {
+    //         setArticles(await getArticles());
+    //     })();
+    // });
+
     const articles = await getArticles();
 
     return (
@@ -27,6 +34,13 @@ const ArticlesList = async () => {
                         <h1>{item.title}</h1>
                         <p>{item.description}</p>
                         <span>Read more...</span>
+                        <ul className="tag-list">
+                            {item.tagList.map((tag) => (
+                                <li className="tag-default tag-pill tag-outline">
+                                    {tag}
+                                </li>
+                            ))}
+                        </ul>
                     </a>
                 </div>
             ))}
