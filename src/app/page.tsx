@@ -2,12 +2,8 @@ import ArticleList from "@/components/articleList";
 import "./page.module.css";
 import Banner from "@/components/banner";
 import TagList from "@/components/tagList";
-import axios from "axios";
 
-export default async function Home() {
-    const response = await axios.get("https://api.realworld.io/api/tags");
-
-    console.error(response);
+export default function Home() {
     return (
         <div className="home-page">
             <Banner></Banner>
