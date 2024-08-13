@@ -19,4 +19,5 @@ interface Article {
 // Định nghĩa kiểu dữ liệu trả về từ API
 interface ArticleResponse {
     articles: Article[];
+    articlesCount: number;
 }

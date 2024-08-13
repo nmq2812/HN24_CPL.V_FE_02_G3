@@ -1,15 +1,10 @@
 import axios from "../libs/axios";
 
-const getArticles = async (): Promise<Article[]> => {
-  try {
+const getArticles = async (): Promise<ArticleResponse> => {
     const response = await axios.get<ArticleResponse>(
-      "https://node-express-conduit.appspot.com/api/articles"
+        "https://node-express-conduit.appspot.com/api/articles"
     );
-    return response.data.articles;
-  } catch (error) {
-    console.error("Error fetching the articles:", error);
-    return [];
-  }
+    return response.data;
 };
 
 export default getArticles;
