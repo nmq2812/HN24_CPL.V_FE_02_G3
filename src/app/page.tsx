@@ -9,24 +9,7 @@ export default function Home() {
             <Banner></Banner>
             <div className="container page">
                 <div className="row">
-                    <div className="col-md-9">
-                        <div className="feed-toggle">
-                            <ul className="nav nav-pills outline-active">
-                                <li className="nav-item">
-                                    <a className="nav-link" href="">
-                                        Your Feed
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link active" href="">
-                                        Global Feed
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <ArticleList></ArticleList>
-                    </div>
+                    <ArticleList></ArticleList>
 
                     <div className="col-md-3">
                         <div className="sidebar">
