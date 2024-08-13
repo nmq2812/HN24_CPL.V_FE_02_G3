@@ -1,3 +1,5 @@
+import Button from "@/components/Button/Button";
+
 export default function NewArticle() {
   return (
     <div className="editor-page">
@@ -40,12 +42,9 @@ export default function NewArticle() {
                 />
                 <div className="tag-list"></div>
               </fieldset>
-              <button
-                className="btn btn-lg pull-xs-right btn-primary"
-                type="button"
-              >
+              <Button className="btn btn-lg pull-xs-right btn-primary">
                 Publish Article
-              </button>
+              </Button>
             </form>
           </div>
         </div>
