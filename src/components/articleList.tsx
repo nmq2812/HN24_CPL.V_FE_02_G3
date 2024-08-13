@@ -2,14 +2,45 @@
 import getArticles from "@/api/articles";
 import { useState, useEffect } from "react";
 
+interface ArticlesProp {
+    articles: Article[];
+}
+
 export default function ArticleList() {
     const [feedState, setFeedState] = useState("global");
-    const [articles, setArticles] = useState<Article[]>();
+    const [articlesResponse, setArticlesResponse] = useState<ArticleResponse>();
     useEffect(() => {
         (async function () {
-            setArticles(await getArticles());
+            setArticlesResponse(await getArticles());
         })();
     });
+
+    //phân trang
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const pagination: JSX.Element[] = [];
+    const handleClick = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+        // xử lý articlesResponse để lấy data
+    };
+    for (let i = 0; i <= articlesResponse?.articlesCount!! / 10; i++) {
+        pagination.push(
+            <li
+                className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
+                key={i}
+            >
+                <a
+                    className="page-link"
+                    href="#"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        handleClick(i + 1);
+                    }}
+                >
+                    {i + 1}
+                </a>
+            </li>
+        );
+    }
 
     return (
         <div className="col-md-9">
@@ -45,18 +76,24 @@ export default function ArticleList() {
             </div>
 
             {feedState === "global" ? (
-                <GlobalFeedList articles={articles!!}></GlobalFeedList>
+                <GlobalFeedList
+                    articles={articlesResponse?.articles!!}
+                ></GlobalFeedList>
             ) : (
                 <PersonalFeedList></PersonalFeedList>
             )}
+
+            <nav>
+                <ul className="pagination">{pagination}</ul>
+            </nav>
         </div>
     );
 }
 
-const GlobalFeedList = ({ articles }: ArticleResponse) => {
+const GlobalFeedList = ({ articles }: ArticlesProp) => {
     return (
         <div className="">
-            {articles != undefined ? (
+            {articles !== undefined ? (
                 articles.map((item) => (
                     <div className="article-preview">
                         <div className="article-meta">
