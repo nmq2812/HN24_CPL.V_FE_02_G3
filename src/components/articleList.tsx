@@ -13,7 +13,7 @@ export default function ArticleList() {
         (async function () {
             setArticlesResponse(await getArticles());
         })();
-    });
+    }, []);
 
     //phân trang
     const [currentPage, setCurrentPage] = useState<number>(1);
