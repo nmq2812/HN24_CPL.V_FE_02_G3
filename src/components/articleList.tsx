@@ -1,5 +1,5 @@
 "use client";
-import getArticles from "@/api/articles";
+import getArticles from "@/apis/articles";
 import { useState, useEffect } from "react";
 
 interface ArticlesProp {
@@ -143,13 +143,13 @@ const PersonalFeedList = () => {
 };
 
 function formatDate(dateString: string): string {
-    const date = new Date(dateString);
+  const date = new Date(dateString);
 
-    const options: Intl.DateTimeFormatOptions = {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    };
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
 
-    return new Intl.DateTimeFormat("en-US", options).format(date);
+  return new Intl.DateTimeFormat("en-US", options).format(date);
 }
