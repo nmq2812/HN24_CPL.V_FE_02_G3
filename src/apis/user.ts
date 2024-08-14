@@ -1,14 +1,15 @@
+"use server";
 import axios from "../libs/axios";
 import { AxiosResponse } from "axios";
 
 export const loginAPI = async (
-  credentials: LoginCredentials
+    credentials: LoginCredentials
 ): Promise<AxiosResponse> => {
-  return await axios.post("/users/login", { user: credentials });
+    return await axios.post("/users/login", { user: credentials });
 };
 
 export const getCurrentUser = async (token: string) => {
-  return await axios.get("/users", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+    return await axios.get("/users", {
+        headers: { Authorization: `Bearer ${token}` },
+    });
 };
