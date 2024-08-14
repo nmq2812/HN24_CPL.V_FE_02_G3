@@ -2,16 +2,16 @@ import Image from "next/image";
 import Link from "next/link";
 
 export enum ProfileTab {
-  MyArticles = "my-articles",
-  FavoritedArticles = "favorited-articles",
+    MyArticles = "my-articles",
+    FavoritedArticles = "favorited-articles",
 }
 
 type Params = {
-  username: string;
+    username: string;
 };
 
 interface Props {
-  defaultTab: ProfileTab.MyArticles | ProfileTab.FavoritedArticles;
+    defaultTab: ProfileTab.MyArticles | ProfileTab.FavoritedArticles;
 }
 
 /** 
@@ -21,33 +21,34 @@ interface Props {
   });
 */
 
-export default function ProfilePage() {
-  const isAuthor = true;
+export default function ProfilePage(user: User) {
+    const isAuthor = true;
 
-  return (
-    <div className="profile-page">
-      <div className="user-info">
-        <div className="container">
-          <div className="row">
-            <div className="col-xs-12 col-md-10 offset-md-1">
-              <div className="row">
-                <div className="col-xs-12 col-md-10 offset-md-1">
-                  <img
-                    src="https://api.realworld.io/images/smiley-cyrus.jpeg"
-                    className="user-img"
-                    alt="profile avatar"
-                  />
-                  <h4>Minhvd</h4>
-                  <p></p>
-                  <a
-                    className="btn btn-sm btn-outline-secondary action-btn"
-                    href="/settings"
-                  >
-                    <i className="ion-gear-a" /> Edit Profile Settings
-                  </a>
-                </div>
-              </div>
-              {/** 
+    return (
+        <div className="profile-page">
+            <div className="user-info">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-xs-12 col-md-10 offset-md-1">
+                            <div className="row">
+                                <div className="col-xs-12 col-md-10 offset-md-1">
+                                    <img
+                                        src="https://api.realworld.io/images/smiley-cyrus.jpeg"
+                                        className="user-img"
+                                        alt="profile avatar"
+                                    />
+                                    <h4>Minhvd</h4>
+                                    <p></p>
+                                    <a
+                                        className="btn btn-sm btn-outline-secondary action-btn"
+                                        href="/settings"
+                                    >
+                                        <i className="ion-gear-a" /> Edit
+                                        Profile Settings
+                                    </a>
+                                </div>
+                            </div>
+                            {/** 
               <Image
                 src={ }
                 className="user-img"
@@ -70,27 +71,27 @@ export default function ProfilePage() {
                   following={profile.following}
                 />
                )} */}
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <div className="container">
-        <div className="row">
-          <div className="col-xs-12 col-md-10 offset-md-1">
-            <div className="articles-toggle">
-              <ul className="nav nav-pills outline-active">
-                <li className="nav-item">
-                  <a className="nav-link disabled" href="">
-                    My Articles
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link active" href="">
-                    Favorited Articles
-                  </a>
-                </li>
-                {/** 
+            <div className="container">
+                <div className="row">
+                    <div className="col-xs-12 col-md-10 offset-md-1">
+                        <div className="articles-toggle">
+                            <ul className="nav nav-pills outline-active">
+                                <li className="nav-item">
+                                    <a className="nav-link disabled" href="">
+                                        My Articles
+                                    </a>
+                                </li>
+                                <li className="nav-item">
+                                    <a className="nav-link active" href="">
+                                        Favorited Articles
+                                    </a>
+                                </li>
+                                {/** 
                 <li className="nav-item">
                   <a
                     className={`nav-link ${
@@ -115,30 +116,30 @@ export default function ProfilePage() {
                     Favorited Articles
                   </a>
                 </li>*/}
-              </ul>
-            </div>
-            <div className="article-preview">
-              <div className="article-meta">
-                <a href="profile.html">
-                  <img src="http://i.imgur.com/Qr71crq.jpg" />
-                </a>
-                <div className="info">
-                  <a href="" className="author">
-                    Eric Simons
-                  </a>
-                  <span className="date">January 20th</span>
-                </div>
-                <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                  <i className="ion-heart"></i> 29
-                </button>
-              </div>
-              <a href="" className="preview-link">
-                <h1>How to build webapps that scale</h1>
-                <p>This is the description for the post.</p>
-                <span>Read more...</span>
-              </a>
-            </div>
-            {/** 
+                            </ul>
+                        </div>
+                        <div className="article-preview">
+                            <div className="article-meta">
+                                <a href="profile.html">
+                                    <img src="http://i.imgur.com/Qr71crq.jpg" />
+                                </a>
+                                <div className="info">
+                                    <a href="" className="author">
+                                        Eric Simons
+                                    </a>
+                                    <span className="date">January 20th</span>
+                                </div>
+                                <button className="btn btn-outline-primary btn-sm pull-xs-right">
+                                    <i className="ion-heart"></i> 29
+                                </button>
+                            </div>
+                            <a href="" className="preview-link">
+                                <h1>How to build webapps that scale</h1>
+                                <p>This is the description for the post.</p>
+                                <span>Read more...</span>
+                            </a>
+                        </div>
+                        {/** 
             {isFetchingArticles && <div>Loading articles...</div>}
             {!isFetchingArticles &&
               articles &&
@@ -160,9 +161,9 @@ export default function ProfilePage() {
                 update={setPage}
               />
             )}*/}
-          </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 }
