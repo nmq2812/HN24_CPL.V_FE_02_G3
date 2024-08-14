@@ -1,5 +1,9 @@
+"use client";
+import { getProfile } from "@/apis/profile";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/auth";
 
 export enum ProfileTab {
     MyArticles = "my-articles",
@@ -21,8 +25,16 @@ interface Props {
   });
 */
 
-export default function ProfilePage(user: User) {
+export default function ProfilePage(username: string) {
     const isAuthor = true;
+    const [profile, setProfile] = useState<Profile>();
+    const { user, login } = useAuth();
+
+    useEffect(() => {
+        (async function () {
+            setProfile(await getProfile(user?.username!!));
+        })();
+    }, []);
 
     return (
         <div className="profile-page">
@@ -37,7 +49,7 @@ export default function ProfilePage(user: User) {
                                         className="user-img"
                                         alt="profile avatar"
                                     />
-                                    <h4>Minhvd</h4>
+                                    <h4>{profile?.userName}</h4>
                                     <p></p>
                                     <a
                                         className="btn btn-sm btn-outline-secondary action-btn"

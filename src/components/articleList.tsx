@@ -16,6 +16,9 @@ export default function ArticleList() {
     }, []);
 
     //phân trang
+    //hiện giờ mặc định chỉ lấy được 10 item từ Articles API, xử lý để lấy hết dữ liệu và phân trang
+    //cách 1: fectch data theo trang hiện tại, vào phần nào fetch phần đó (xử lý đơn giản nhưng có thời gian giãn cách giữa các lần chuyển trang) - server executing
+    //cách 2: lấy hết data về 1 lần rồi xử lý logic để phân riêng ra các trang - client execuiting
     const [currentPage, setCurrentPage] = useState<number>(1);
     const pagination: JSX.Element[] = [];
     const handleClick = (pageNumber: number) => {
