@@ -14,6 +14,7 @@
     "conduit": "file:",
     "jwt-decode": "^4.0.0",
     "next": "14.2.5",
+    "nookies": "^2.5.2",
     "react": "^18",
     "react-dom": "^18"
   },

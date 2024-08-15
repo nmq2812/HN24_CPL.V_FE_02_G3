@@ -6,6 +6,7 @@ import {
   useEffect,
   ReactNode,
 } from "react";
+import { setCookie, destroyCookie } from "nookies";
 import { getCurrentUser } from "@/actions";
 import { jwtDecode } from "jwt-decode";
 
@@ -23,36 +24,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const token = localStorage.getItem("token");
-      if (!token || isExpired(token)) {
-        logout();
-      } else {
-        try {
-          const user = await getCurrentUser(token);
-          console.log(user);
-          login(user.user);
-        } catch (e) {
-          logout();
-          throw e;
-        }
-      }
-    })();
+    const token = localStorage.getItem("token");
+    if (token && !isExpired(token)) {
+      getCurrentUser(token)
+        .then((user) => login(user.user))
+        .catch(logout);
+    } else {
+      logout();
+    }
   }, []);
 
-  function isExpired(token: string) {
+  const isExpired = (token: string) => {
     try {
-      const decodeToken = jwtDecode(token);
+      const decodedToken = jwtDecode(token);
       const currentTime = Math.floor(Date.now() / 1000);
-      return decodeToken.exp ? decodeToken.exp < currentTime : true;
+      return decodedToken.exp ? decodedToken.exp < currentTime : true;
     } catch (error) {
-      console.error("Invalid token:", error);
+      console.error("Token không hợp lệ: ", error);
       return true;
     }
-  }
+  };
 
   const login = (user: User) => {
     setUser(user);
+    setCookie(null, "isAuthenticated", "true", {
+      maxAge: 30 * 24 * 60 * 60, // Cookie có thời hạn 30 ngày
+      path: "/",
+    });
     setIsAuthenticated(true);
     localStorage.setItem("token", user.token);
   };
@@ -60,6 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
+    destroyCookie(null, "isAuthenticated");
     localStorage.removeItem("token");
   };
 
@@ -73,7 +72,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error("useAuth sử dụng trong AuthProvider");
   }
   return context;
 };
