@@ -1,3 +1,4 @@
+"use server";
 import axios from "../libs/axios";
 import { AxiosResponse } from "axios";
 
