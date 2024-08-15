@@ -1,5 +1,6 @@
 "use client";
-import getArticles from "@/apis/articles";
+import { getArticles } from "@/apis/articles";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 interface ArticlesProp {
@@ -13,9 +14,12 @@ export default function ArticleList() {
         (async function () {
             setArticlesResponse(await getArticles());
         })();
-    });
+    }, []);
 
     //phân trang
+    //hiện giờ mặc định chỉ lấy được 10 item từ Articles API, xử lý để lấy hết dữ liệu và phân trang
+    //cách 1: fectch data theo trang hiện tại, vào phần nào fetch phần đó (xử lý đơn giản nhưng có thời gian giãn cách giữa các lần chuyển trang) - server executing
+    //cách 2: lấy hết data về 1 lần rồi xử lý logic để phân riêng ra các trang - client execuiting
     const [currentPage, setCurrentPage] = useState<number>(1);
     const pagination: JSX.Element[] = [];
     const handleClick = (pageNumber: number) => {
@@ -97,13 +101,16 @@ const GlobalFeedList = ({ articles }: ArticlesProp) => {
                 articles.map((item) => (
                     <div className="article-preview">
                         <div className="article-meta">
-                            <a href="profile.html">
+                            <Link href={`/profile/${item.author.username}`}>
                                 <img src={item.author.image} />
-                            </a>
+                            </Link>
                             <div className="info">
-                                <a href="" className="author">
+                                <Link
+                                    href={`/profile/${item.author.username}`}
+                                    className="author"
+                                >
                                     {item.author.username}
-                                </a>
+                                </Link>
                                 <span className="date">
                                     {formatDate(item.updatedAt)}
                                 </span>
@@ -113,7 +120,10 @@ const GlobalFeedList = ({ articles }: ArticlesProp) => {
                                 {item.favoritesCount}
                             </button>
                         </div>
-                        <a href="" className="preview-link">
+                        <Link
+                            href={`article/${item.title}`}
+                            className="preview-link"
+                        >
                             <h1>{item.title}</h1>
                             <p>{item.description}</p>
                             <span>Read more...</span>
@@ -124,7 +134,7 @@ const GlobalFeedList = ({ articles }: ArticlesProp) => {
                                     </li>
                                 ))}
                             </ul>
-                        </a>
+                        </Link>
                     </div>
                 ))
             ) : (
@@ -143,13 +153,13 @@ const PersonalFeedList = () => {
 };
 
 function formatDate(dateString: string): string {
-  const date = new Date(dateString);
+    const date = new Date(dateString);
 
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
+    const options: Intl.DateTimeFormatOptions = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    };
 
-  return new Intl.DateTimeFormat("en-US", options).format(date);
+    return new Intl.DateTimeFormat("en-US", options).format(date);
 }
