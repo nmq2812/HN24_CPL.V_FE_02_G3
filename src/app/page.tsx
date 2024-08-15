@@ -1,32 +1,51 @@
 "use client";
 
-import "./page.module.css";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
-import Home from "@/components/pages/homePage";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "@/app/login/page";
+import { useEffect, useState } from 'react';
+import { fetchArticles } from '@/services/articles';
 
-export default function App() {
-    return (
-        <Router>
-            <Routes>
-                <Route path="/" element={renderApp(<Home></Home>)}></Route>
-                <Route
-                    path="/login"
-                    element={renderApp(<Login></Login>)}
-                ></Route>
-            </Routes>
-        </Router>
-    );
-}
+import Banner from '@/components/banner';
 
-function renderApp(p0: any) {
+export default function Home() {
+    const [articles, setArticles] = useState([]);
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        const loadArticles = async () => {
+            try {
+                const articles = await fetchArticles();
+                setArticles(articles);
+            } catch (err) {
+                if (err instanceof Error)
+                    setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadArticles();
+    }, []);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
     return (
-        <div className="">
-            <Header></Header>
-            {p0}
-            <Footer></Footer>
+        <div>
+            <Banner />
+            <h1>Articles</h1>
+            <ul>
+                {articles.map((article: any) => (
+                    <li key={article.slug}>
+                        <h2>{article.title}</h2>
+                        <p>{article.description}</p>
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 }
