@@ -3,7 +3,7 @@ import { getProfile } from "@/apis/profile";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/auth";
+import { usePathname } from "next/navigation";
 
 export enum ProfileTab {
     MyArticles = "my-articles",
@@ -25,16 +25,17 @@ interface Props {
   });
 */
 
-export default function ProfilePage(username: string) {
-    const isAuthor = true;
+export default function ProfilePage() {
+    const username = usePathname().substring(9);
     const [profile, setProfile] = useState<Profile>();
-    const { user, login } = useAuth();
 
     useEffect(() => {
         (async function () {
-            setProfile(await getProfile(user?.username!!));
+            const profile = await (await getProfile(username)).profile;
+            setProfile(profile);
         })();
     }, []);
+    console.log(profile?.username);
 
     return (
         <div className="profile-page">
@@ -45,11 +46,11 @@ export default function ProfilePage(username: string) {
                             <div className="row">
                                 <div className="col-xs-12 col-md-10 offset-md-1">
                                     <img
-                                        src="https://api.realworld.io/images/smiley-cyrus.jpeg"
+                                        src={profile?.image}
                                         className="user-img"
                                         alt="profile avatar"
                                     />
-                                    <h4>{profile?.userName}</h4>
+                                    <h4>{profile?.username}</h4>
                                     <p></p>
                                     <a
                                         className="btn btn-sm btn-outline-secondary action-btn"

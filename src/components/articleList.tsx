@@ -1,5 +1,6 @@
 "use client";
-import getArticles from "@/apis/articles";
+import { getArticles } from "@/apis/articles";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 interface ArticlesProp {
@@ -100,13 +101,16 @@ const GlobalFeedList = ({ articles }: ArticlesProp) => {
                 articles.map((item) => (
                     <div className="article-preview">
                         <div className="article-meta">
-                            <a href="profile.html">
+                            <Link href={`/profile/${item.author.username}`}>
                                 <img src={item.author.image} />
-                            </a>
+                            </Link>
                             <div className="info">
-                                <a href="" className="author">
+                                <Link
+                                    href={`/profile/${item.author.username}`}
+                                    className="author"
+                                >
                                     {item.author.username}
-                                </a>
+                                </Link>
                                 <span className="date">
                                     {formatDate(item.updatedAt)}
                                 </span>
@@ -116,7 +120,10 @@ const GlobalFeedList = ({ articles }: ArticlesProp) => {
                                 {item.favoritesCount}
                             </button>
                         </div>
-                        <a href="" className="preview-link">
+                        <Link
+                            href={`article/${item.title}`}
+                            className="preview-link"
+                        >
                             <h1>{item.title}</h1>
                             <p>{item.description}</p>
                             <span>Read more...</span>
@@ -127,7 +134,7 @@ const GlobalFeedList = ({ articles }: ArticlesProp) => {
                                     </li>
                                 ))}
                             </ul>
-                        </a>
+                        </Link>
                     </div>
                 ))
             ) : (
@@ -146,13 +153,13 @@ const PersonalFeedList = () => {
 };
 
 function formatDate(dateString: string): string {
-  const date = new Date(dateString);
+    const date = new Date(dateString);
 
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
+    const options: Intl.DateTimeFormatOptions = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    };
 
-  return new Intl.DateTimeFormat("en-US", options).format(date);
+    return new Intl.DateTimeFormat("en-US", options).format(date);
 }
