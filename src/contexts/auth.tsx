@@ -6,11 +6,12 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-import { getCurrentUser } from "@/apis/user";
+import { getCurrentUser } from "@/actions";
 import { jwtDecode } from "jwt-decode";
 
 interface AuthContextType {
   user: User | null;
+  isAuthenticated: boolean;
   login: (user: User) => void;
   logout: () => void;
 }
@@ -19,34 +20,51 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      // Bạn có thể kiểm tra và cập nhật user từ token
-      getCurrentUser(token)
-        .then((response) => {
-          setUser(response.data.user);
-        })
-        .catch(() => {
+    (async () => {
+      const token = localStorage.getItem("token");
+      if (!token || isExpired(token)) {
+        logout();
+      } else {
+        try {
+          const user = await getCurrentUser(token);
+          console.log(user);
+          login(user.user);
+        } catch (e) {
           logout();
-        });
-    }
+          throw e;
+        }
+      }
+    })();
   }, []);
+
+  function isExpired(token: string) {
+    try {
+      const decodeToken = jwtDecode(token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      return decodeToken.exp ? decodeToken.exp < currentTime : true;
+    } catch (error) {
+      console.error("Invalid token:", error);
+      return true;
+    }
+  }
 
   const login = (user: User) => {
     setUser(user);
+    setIsAuthenticated(true);
     localStorage.setItem("token", user.token);
   };
 
   const logout = () => {
     setUser(null);
+    setIsAuthenticated(false);
     localStorage.removeItem("token");
-    // Có thể thêm các bước để xử lý khi logout (ví dụ: chuyển trang)
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

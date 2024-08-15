@@ -1,51 +1,24 @@
 "use client";
-import { useState } from "react";
-import { loginAPI } from "@/apis/user";
-import Button from "@/components/Button/Button";
+import { loginAPI } from "@/actions/index";
+import { Button, FormProps, Input, Form } from "antd";
 import { useAuth } from "@/contexts/auth";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 
 export default function Login() {
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const { user, login } = useAuth();
+  const { login } = useAuth();
   const router = useRouter();
 
-  console.log(user);
-  async function handleLogin(
-    event: React.FormEvent<HTMLFormElement>
-  ): Promise<void> {
-    event.preventDefault(); // Ngăn chặn hành động submit mặc định của form
-
-    const formData = new FormData(event.currentTarget);
-    const credentials: LoginCredentials = {
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-    };
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await loginAPI(credentials);
-      login(res.data.user);
+  const handleLogin: FormProps<LoginCredentials>["onFinish"] = async (
+    values
+  ) => {
+    const res = await loginAPI(values);
+    if (res.status === 200) {
+      login(res.response.user);
       router.push("/");
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        console.log(err.response?.data?.errors);
-        setError(
-          "Login failed: " + JSON.stringify(err.response?.data?.errors) ||
-            "Unknown error"
-        );
-      } else {
-        setError("An unexpected error occurred");
-      }
-    } finally {
-      setLoading(false);
+    } else if (res.status === 422) {
+      throw new Error(res.response);
     }
-  }
+  };
 
   return (
     <div className="auth-page">
@@ -57,34 +30,48 @@ export default function Login() {
               <a href="">Have an account?</a>
             </p>
 
-            <ul className="error-messages"></ul>
-
-            <form onSubmit={handleLogin}>
-              <fieldset className="form-group">
-                <input
-                  name="email"
-                  className="form-control form-control-lg"
-                  type="text"
-                  placeholder="Email"
-                />
-              </fieldset>
-              <fieldset className="form-group">
-                <input
-                  name="password"
-                  className="form-control form-control-lg"
-                  type="password"
-                  placeholder="Password"
-                />
-              </fieldset>
-              {error && <p className="error">{error}</p>}
-              <Button
-                type="submit"
-                disabled={loading}
-                className="btn btn-lg btn-primary pull-xs-right"
+            <Form
+              name="basic"
+              size="large"
+              layout="vertical"
+              labelCol={{ span: 6 }}
+              style={{ maxWidth: 500, margin: "auto" }}
+              initialValues={{ remember: true }}
+              onFinish={handleLogin}
+              autoComplete="on"
+            >
+              <Form.Item
+                label="Email"
+                name="email"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter your email!",
+                  },
+                  {
+                    type: "email",
+                    message: "The input is not a valid email!",
+                  },
+                ]}
               >
-                {loading ? "Signing in..." : "Sign In"}
-              </Button>
-            </form>
+                <Input placeholder="Enter your email" />
+              </Form.Item>
+              <Form.Item<LoginCredentials>
+                label="Password"
+                name="password"
+                rules={[
+                  { required: true, message: "Please input your password!" },
+                ]}
+              >
+                <Input.Password placeholder="Enter your password" />
+              </Form.Item>
+
+              <Form.Item style={{ float: "right" }}>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              </Form.Item>
+            </Form>
           </div>
         </div>
       </div>

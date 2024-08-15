@@ -28,9 +28,11 @@ export default function RootLayout({
         ></link>
       </head>
       <body className={inter.className}>
-        <Header state="test" user={false}></Header>
-        <AuthProvider>{children}</AuthProvider>
-        <Footer></Footer>
+        <AuthProvider>
+          <Header></Header>
+          {children}
+          <Footer></Footer>
+        </AuthProvider>
       </body>
     </html>
   );
