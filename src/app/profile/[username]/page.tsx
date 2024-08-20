@@ -18,15 +18,12 @@ interface Props {
   defaultTab: ProfileTab.MyArticles | ProfileTab.FavoritedArticles;
 }
 
-/** 
-  const profileQuery = (username: string) => ({
-    queryKey: ['profile', username],
-    queryFn: () => getProfile(username), //api
-  });
-*/
-
-export default function ProfilePage() {
-  const username = usePathname().substring(9);
+export default function ProfilePage({
+  params,
+}: {
+  params: { username: string };
+}) {
+  const username = params.username;
   const [profile, setProfile] = useState<Profile>();
 
   useEffect(() => {

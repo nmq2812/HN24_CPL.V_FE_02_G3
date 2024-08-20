@@ -1,6 +1,7 @@
 import ArticleList from "@/components/articleList";
 import "./page.module.css";
 import TagList from "@/components/tagList";
+import "antd/dist/reset.css";
 
 export default function Home() {
   return (
