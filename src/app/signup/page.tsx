@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-export default function Login() {
+export default function Signup() {
     const { login } = useAuth();
     const router = useRouter();
 
@@ -26,9 +26,9 @@ export default function Login() {
             <div className="container page">
                 <div className="row">
                     <div className="col-md-6 offset-md-3 col-xs-12">
-                        <h1 className="text-xs-center">Login</h1>
+                        <h1 className="text-xs-center">Sign up</h1>
                         <p className="text-xs-center">
-                            <Link href="/signup">New User? Sign up now!</Link>
+                            <Link href="/login">Have an account?</Link>
                         </p>
 
                         <Form
@@ -41,6 +41,18 @@ export default function Login() {
                             onFinish={handleLogin}
                             autoComplete="on"
                         >
+                            <Form.Item
+                                label="Username"
+                                name="username"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please input your username!",
+                                    },
+                                ]}
+                            >
+                                <Input placeholder="Enter your username" />
+                            </Form.Item>
                             <Form.Item
                                 label="Email"
                                 name="email"

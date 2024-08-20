@@ -8,42 +8,61 @@ interface HeaderProps {
 }
 
 export default function Header() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user, login } = useAuth();
+
   return (
-    <nav className="navbar navbar-light">
-      <div className="container">
-        <Link className="navbar-brand" href="/">
-          conduit
-        </Link>
-        <ul className="nav navbar-nav pull-xs-right">
-          <li className="nav-item">
-            <Link className="nav-link" href="/">
-              Home
-            </Link>
-          </li>
-          {isAuthenticated && (
-            <li className="nav-item">
-              <Link className="nav-link" href="/editor">
-                <i className="ion-compose"></i>&nbsp;New Article
+      <nav className="navbar navbar-light">
+          <div className="container">
+              <Link className="navbar-brand" href="/">
+                  conduit
               </Link>
-            </li>
-          )}
-          {isAuthenticated && (
-            <li className="nav-item">
-              <Link className="nav-link" href="">
-                <i className="ion-gear-a"></i>&nbsp;Settings
-              </Link>
-            </li>
-          )}
-          {!isAuthenticated && (
-            <li className="nav-item">
-              <Link href="/login" className="nav-link">
-                Login
-              </Link>
-            </li>
-          )}
-        </ul>
-      </div>
-    </nav>
+              <ul className="nav navbar-nav pull-xs-right">
+                  <li className="nav-item">
+                      <Link className="nav-link" href="/">
+                          Home
+                      </Link>
+                  </li>
+                  {isAuthenticated && (
+                      <li className="nav-item">
+                          <Link className="nav-link" href="/editor">
+                              <i className="ion-compose"></i>&nbsp;New Article
+                          </Link>
+                      </li>
+                  )}
+                  {isAuthenticated && (
+                      <li className="nav-item">
+                          <Link className="nav-link" href="">
+                              <i className="ion-gear-a"></i>&nbsp;Settings
+                          </Link>
+                      </li>
+                  )}
+                  {isAuthenticated && (
+                      <li className="nav-item">
+                          <Link
+                              className="nav-link"
+                              href={`/profile/${user?.username}`}
+                          >
+                              <i className="ion-compose"></i>&nbsp;
+                              {user?.username}
+                          </Link>
+                      </li>
+                  )}
+                  {!isAuthenticated && (
+                      <li className="nav-item">
+                          <Link href="/login" className="nav-link">
+                              Sign in
+                          </Link>
+                      </li>
+                  )}
+                  {!isAuthenticated && (
+                      <li className="nav-item">
+                          <Link href="/signup" className="nav-link">
+                              Sign up
+                          </Link>
+                      </li>
+                  )}
+              </ul>
+          </div>
+      </nav>
   );
 }

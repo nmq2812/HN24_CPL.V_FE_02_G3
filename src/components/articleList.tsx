@@ -98,15 +98,20 @@ const GlobalFeedList = ({ articles }: ArticlesProp) => {
     return (
         <div className="">
             {articles !== undefined ? (
-                articles.map((item) => (
-                    <div className="article-preview">
+                articles.map((item, index) => (
+                    <div className="article-preview" key={index}>
                         <div className="article-meta">
                             <Link href={`/profile/${item.author.username}`}>
                                 <img src={item.author.image} />
                             </Link>
                             <div className="info">
                                 <Link
-                                    href={`/profile/${item.author.username}`}
+                                    href={{
+                                        pathname: `/profile/`,
+                                        query: {
+                                            user: item.author.username,
+                                        },
+                                    }}
                                     className="author"
                                 >
                                     {item.author.username}
@@ -121,15 +126,23 @@ const GlobalFeedList = ({ articles }: ArticlesProp) => {
                             </button>
                         </div>
                         <Link
-                            href={`article/${item.title}`}
+                            href={{
+                                pathname: `article`,
+                                query: {
+                                    slug: item.slug,
+                                },
+                            }}
                             className="preview-link"
                         >
                             <h1>{item.title}</h1>
                             <p>{item.description}</p>
                             <span>Read more...</span>
                             <ul className="tag-list">
-                                {item.tagList.map((tag) => (
-                                    <li className="tag-default tag-pill tag-outline">
+                                {item.tagList.map((tag, i) => (
+                                    <li
+                                        className="tag-default tag-pill tag-outline"
+                                        key={i}
+                                    >
                                         {tag}
                                     </li>
                                 ))}
