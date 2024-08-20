@@ -4,19 +4,21 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { Space } from "antd";
 
-export enum ProfileTab {
-    MyArticles = "my-articles",
-    FavoritedArticles = "favorited-articles",
-}
+// export enum ProfileTab {
+//     MyArticles = "my-articles",
+//     FavoritedArticles = "favorited-articles",
+// }
 
-type Params = {
-    username: string;
-};
+// type Params = {
+//     username: string;
+// };
 
-interface Props {
-    defaultTab: ProfileTab.MyArticles | ProfileTab.FavoritedArticles;
-}
+// interface Props {
+//     defaultTab: ProfileTab.MyArticles | ProfileTab.FavoritedArticles;
+// }
 
 /** 
   const profileQuery = (username: string) => ({
@@ -25,17 +27,20 @@ interface Props {
   });
 */
 
-export default function ProfilePage() {
-    const username = usePathname().substring(9);
+function ProfilePage() {
+    const router = useSearchParams();
+    const username = router.get("user");
     const [profile, setProfile] = useState<Profile>();
 
     useEffect(() => {
-        (async function () {
-            const profile = await (await getProfile(username)).profile;
-            setProfile(profile);
-        })();
+        if (typeof username === "string") {
+            (async function () {
+                const profile = await await getProfile(username);
+                setProfile(profile.profile);
+                console.log(profile.profile);
+            })();
+        } else console.log("error");
     }, []);
-    console.log(profile?.username);
 
     return (
         <div className="profile-page">
@@ -61,29 +66,6 @@ export default function ProfilePage() {
                                     </a>
                                 </div>
                             </div>
-                            {/** 
-              <Image
-                src={ }
-                className="user-img"
-                alt="profile avatar"
-              />
-              <h4>{ user name }</h4>
-              <p>{ bio }</p>
-              {isAuthor && (
-                <Link
-                  href={}
-                  className="btn btn-sm btn-outline-secondary action-btn"
-                >
-                  <i className="ion-gear-a"></i> Edit Profile Settings
-                </Link> 
-              )}
-
-              {!isAuthor && (
-                <FollowButton
-                  username={profile.username}
-                  following={profile.following}
-                />
-               )} */}
                         </div>
                     </div>
                 </div>
@@ -95,43 +77,13 @@ export default function ProfilePage() {
                         <div className="articles-toggle">
                             <ul className="nav nav-pills outline-active">
                                 <li className="nav-item">
-                                    <a className="nav-link disabled" href="">
-                                        My Articles
-                                    </a>
-                                </li>
-                                <li className="nav-item">
                                     <a className="nav-link active" href="">
-                                        Favorited Articles
+                                        {username}'s articles
                                     </a>
                                 </li>
-                                {/** 
-                <li className="nav-item">
-                  <a
-                    className={`nav-link ${
-                      activeTab === ProfileTab.MyArticles ? "active" : ""
-                    }`}
-                    href=""
-                    onClick={(event) => switchTab(ProfileTab.MyArticles, event)}
-                  >
-                    My Articles
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a
-                    className={`nav-link ${
-                      activeTab === ProfileTab.FavoritedArticles ? "active" : ""
-                    }`}
-                    href=""
-                    onClick={(event) =>
-                      switchTab(ProfileTab.FavoritedArticles, event)
-                    }
-                  >
-                    Favorited Articles
-                  </a>
-                </li>*/}
                             </ul>
                         </div>
-                        <div className="article-preview">
+                        {/* <div className="article-preview">
                             <div className="article-meta">
                                 <a href="profile.html">
                                     <img src="http://i.imgur.com/Qr71crq.jpg" />
@@ -151,32 +103,13 @@ export default function ProfilePage() {
                                 <p>This is the description for the post.</p>
                                 <span>Read more...</span>
                             </a>
-                        </div>
-                        {/** 
-            {isFetchingArticles && <div>Loading articles...</div>}
-            {!isFetchingArticles &&
-              articles &&
-              articles.articles &&
-              articles.articles.map((article: Article) => (
-                <ArticlePreview article={article} key={article.slug} />
-              ))}
-            {!isLoadingArticles &&
-              articles &&
-              articles.articles &&
-              articles.articles.length === 0 && (
-                <div>No articles are here... yet.</div>
-              )}
-
-            {!isFetchingArticles && articles && articles.articlesCount > 10 && (
-              <Pagination
-                count={articles.articlesCount}
-                limit={10}
-                update={setPage}
-              />
-            )}*/}
+                        </div> */}
+                        <div className="">No articles are here... yet.</div>
                     </div>
                 </div>
             </div>
         </div>
     );
 }
+
+export default ProfilePage;
