@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 import { AuthProvider } from "@/contexts/auth";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import MainLayout from "@/components/Layout/MainLayout";
+import AntdStyledComponentsRegistry from "@/libs/AntdStyledComponentsRegistry";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,9 +30,10 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <AuthProvider>
-          <Header></Header>
-          {children}
-          <Footer></Footer>
+          <AntdStyledComponentsRegistry>
+            <MainLayout>{children}</MainLayout>
+            <Toaster position="bottom-right" />
+          </AntdStyledComponentsRegistry>
         </AuthProvider>
       </body>
     </html>

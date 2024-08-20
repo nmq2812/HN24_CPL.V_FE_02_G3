@@ -1,9 +1,8 @@
 "use server";
 
-
 const BASE_URL = "https://node-express-conduit.appspot.com/api";
 
-export const loginAPI = async (credentials: LoginCredentials) => {
+export const loginAction = async (credentials: LoginCredentials) => {
   try {
     const response = await fetch(`${BASE_URL}/users/login`, {
       method: "POST",
