@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { loginUser } from '@/services/users_login';
+import router from 'next/router';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -18,6 +19,7 @@ export default function Login() {
 
     try {
       const user = await loginUser(email, password);
+      router.push('/profile');
       console.log('User logged in:', user);
     } catch (err: unknown) {
       if (err instanceof Error)

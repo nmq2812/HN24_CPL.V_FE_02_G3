@@ -1,16 +1,16 @@
-export default function Footer() {
+"use client";
+
+import React from 'react';
+import { Layout } from 'antd';
+
+const { Footer } = Layout;
+
+const AppFooter: React.FC = () => {
     return (
-        <footer>
-            <div className="container">
-                <a href="/" className="logo-font">
-                    conduit
-                </a>
-                <span className="attribution">
-                    An interactive learning project from{" "}
-                    <a href="https://thinkster.io">Thinkster</a>. Code &amp;
-                    design licensed under MIT.
-                </span>
-            </div>
-        </footer>
+        <Footer style={{ textAlign: 'center' }}>
+            Ant Design ©{new Date().getFullYear()} Created by Ant UED
+        </Footer>
     );
-}
+};
+
+export default AppFooter;
