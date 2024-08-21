@@ -1,10 +1,24 @@
 const BASE_URL = "https://node-express-conduit.appspot.com/api";
 
-export const getClickedArticle = async (slug: string) => {
+export const getArticles = async () => {
     try {
-        const response = await fetch(`${BASE_URL}/articles/${slug}`);
-
+        const response = await fetch(`${BASE_URL}/articles`);
         return response.json();
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getClickedArticle = async (slug: string, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/articles/${slug}`, {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const res = await response.json();
+        console.log(res);
+        return res;
     } catch {
         const result: Article = {
             slug: "error",
