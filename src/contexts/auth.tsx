@@ -5,14 +5,17 @@ import {
   useState,
   useEffect,
   ReactNode,
+  useMemo,
 } from "react";
-import { setCookie, destroyCookie } from "nookies";
+import { setCookie, destroyCookie, parseCookies } from "nookies";
+import { useRouter } from "next/navigation";
 import { getCurrentUser } from "@/actions";
 import { jwtDecode } from "jwt-decode";
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
+  loading: boolean;
   login: (user: User) => void;
   logout: () => void;
 }
@@ -20,18 +23,23 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const route = useRouter();
+  const cookies = parseCookies();
   const [user, setUser] = useState<User | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token && !isExpired(token)) {
-      getCurrentUser(token)
-        .then((user) => login(user.user))
-        .catch(logout);
-    } else {
-      logout();
-    }
+    (async () => {
+      const cookies = parseCookies();
+      const token = localStorage.getItem("token");
+      if (cookies.isAuthenticated === "true" && token && !isExpired(token)) {
+        await getCurrentUser(token)
+          .then((user) => login(user.user))
+          .catch();
+      }
+      setLoading(false);
+    })();
   }, []);
 
   const isExpired = (token: string) => {
@@ -48,7 +56,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (user: User) => {
     setUser(user);
     setCookie(null, "isAuthenticated", "true", {
-      maxAge: 30 * 24 * 60 * 60, // Cookie có thời hạn 30 ngày
+      maxAge: 30 * 24 * 60 * 60,
       path: "/",
     });
     setIsAuthenticated(true);
@@ -59,13 +67,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     setIsAuthenticated(false);
     destroyCookie(null, "isAuthenticated");
+    route.push("/");
     localStorage.removeItem("token");
   };
 
+  const contextValue = useMemo(
+    () => ({ user, isAuthenticated, loading, login, logout }),
+    [user, isAuthenticated, loading]
+  );
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
 

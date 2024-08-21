@@ -1,0 +1,8 @@
+html {
+  padding: 0 !important;
+}
+.ant-btn:focus,
+.ant-btn:active {
+  outline: none;
+  box-shadow: none;
+}
