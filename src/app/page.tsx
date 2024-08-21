@@ -2,24 +2,20 @@ import ArticleList from "@/components/articleList";
 import "./page.module.css";
 import TagList from "@/components/tagList";
 import "antd/dist/reset.css";
-import GlobalFeed from "@/components/Feed/GlobalFeed";
+import { Layout, Row, Col } from "antd";
 
 export default function Home() {
   return (
-    <div className="home-page">
-      <div className="container page">
-        <div className="row">
-          <GlobalFeed/>
+    <Layout style={{ minHeight: "100vh" }}>
+      <Row gutter={16}>
+        {/* Bên trái: Danh sách bài viết */}
+        <Col span={16} style={{ justifyContent: "center", display: "flex" }}>
+          <ArticleList />
+        </Col>
 
-          <div className="col-md-3">
-            <div className="sidebar">
-              <p>Popular Tags</p>
-
-              <TagList></TagList>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+        {/* Bên phải: Danh sách thẻ tag */}
+        <TagList></TagList>
+      </Row>
+    </Layout>
   );
 }
