@@ -20,4 +20,5 @@ interface Article {
 interface ArticleResponse {
     articles: Article[];
     articlesCount: number;
+    page : number;
 }

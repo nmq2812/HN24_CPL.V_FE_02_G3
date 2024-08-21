@@ -16,8 +16,20 @@ export const getArticles = async (): Promise<ArticleResponse> => {
         const result: ArticleResponse = {
             articles: [],
             articlesCount: 0,
+            page: 0,
         };
         return result;
+    }
+};
+
+export const getArticlesLimit = async (page = 0): Promise<ArticleResponse> => {
+    try {
+        const response = await axios.get<ArticleResponse>("/articles", {
+            params: { page }
+        });
+        return response.data;
+    } catch {
+        return { articles: [], articlesCount: 0, page: 0 };
     }
 };
 
@@ -33,6 +45,7 @@ export const getConditionalArticle = async (
         const result: ArticleResponse = {
             articles: [],
             articlesCount: 0,
+            page: 0,
         };
         return result;
     }

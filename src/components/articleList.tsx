@@ -1,5 +1,5 @@
 "use client";
-import { getArticles } from "@/apis/articles";
+import { getArticles, getArticlesLimit } from "@/apis/articles";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
@@ -10,41 +10,39 @@ interface ArticlesProp {
 export default function ArticleList() {
   const [feedState, setFeedState] = useState("global");
   const [articlesResponse, setArticlesResponse] = useState<ArticleResponse>();
-  useEffect(() => {
-    (async function () {
-      setArticlesResponse(await getArticles());
-    })();
-  }, []);
-
-  //phân trang
-  //hiện giờ mặc định chỉ lấy được 10 item từ Articles API, xử lý để lấy hết dữ liệu và phân trang
-  //cách 1: fectch data theo trang hiện tại, vào phần nào fetch phần đó (xử lý đơn giản nhưng có thời gian giãn cách giữa các lần chuyển trang) - server executing
-  //cách 2: lấy hết data về 1 lần rồi xử lý logic để phân riêng ra các trang - client execuiting
   const [currentPage, setCurrentPage] = useState<number>(1);
   const pagination: JSX.Element[] = [];
+
+  useEffect(() => {
+    fetchArticles();
+    console.log('currentPage',currentPage);
+  }, [currentPage]);
+
+  const fetchArticles = async () => {
+    const articlesData = await getArticlesLimit(currentPage);
+    setArticlesResponse(articlesData);
+  };
+
   const handleClick = (pageNumber: number) => {
     setCurrentPage(pageNumber);
-    // xử lý articlesResponse để lấy data
   };
+
   for (let i = 0; i <= articlesResponse?.articlesCount!! / 10; i++) {
-    pagination.push(
-      <li
-        className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
-        key={i}
+  pagination.push(
+    <li className={`page-item ${currentPage === i + 1 ? "active" : ""}`} key={i}>
+      <a
+        className="page-link"
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          handleClick(i + 1);
+        }}
       >
-        <a
-          className="page-link"
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            handleClick(i + 1);
-          }}
-        >
-          {i + 1}
-        </a>
-      </li>
-    );
-  }
+        {i + 1}
+      </a>
+    </li>
+  );
+}
 
   return (
     <div className="col-md-9">
