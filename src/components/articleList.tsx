@@ -2,12 +2,13 @@
 import { getArticles } from "@/apis/articles";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { formatDate } from "@/ultis/formatTime";
 
 interface ArticlesProp {
   articles: Article[];
 }
 
-export default function ArticleList() {
+export default function qArticleList() {
   const [feedState, setFeedState] = useState("global");
   const [articlesResponse, setArticlesResponse] = useState<ArticleResponse>();
   useEffect(() => {
@@ -142,14 +143,3 @@ const PersonalFeedList = () => {
   );
 };
 
-function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-
-  return new Intl.DateTimeFormat("en-US", options).format(date);
-}

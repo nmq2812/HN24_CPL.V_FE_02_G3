@@ -1,31 +1,31 @@
 "use client";
 import { Button, FormProps, Input, Form } from "antd";
-import toast from "react-hot-toast";
-import { loginAction } from "@/actions/index";
+import { loginAction } from "@/actions/authAction";
 import { useAuth } from "@/contexts/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { capitalizeFirstLetter } from "@/ultis/capitalize";
+import capitalizeFirstLetter from "@/ultis/capitalize";
+import toast from "react-hot-toast";
 
-const FormLogin = () => {
+const FormSignup = () => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const { login } = useAuth();
   const handleLogin: FormProps<LoginCredentials>["onFinish"] = (values) => {
     setLoading(true);
-    loginAction(values).then((res) => {
-      if (res.status === 200) {
-        login(res.response.user);
-        toast.success("Đăng nhập thành công");
+    loginAction(values).then((result) => {
+      if (result.success) {
+        login(result.data);
+        toast.success("Sig In successfully");
         router.replace("/");
-      } else if (res.status === 422) {
-        setLoading(false);
-        const errors = res.response.errors;
+      } else {
+        const errors = result.message.errors;
         for (const key in errors) {
           const message = capitalizeFirstLetter(key) + " " + errors[key];
           toast.error(message);
         }
       }
+      setLoading(false);
     });
   };
 
@@ -56,7 +56,7 @@ const FormLogin = () => {
       >
         <Input placeholder="Enter your email" />
       </Form.Item>
-      <Form.Item<LoginCredentials>
+      <Form.Item
         label="Password"
         name="password"
         rules={[{ required: true, message: "Please input your password!" }]}
@@ -73,4 +73,4 @@ const FormLogin = () => {
   );
 };
 
-export default FormLogin;
+export default FormSignup;
