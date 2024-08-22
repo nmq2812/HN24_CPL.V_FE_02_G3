@@ -1,3 +1,4 @@
+"use server";
 import "./page.module.css";
 import TagList from "@/components/tagList";
 import "antd/dist/reset.css";
@@ -5,7 +6,8 @@ import { Layout, Row, Col } from "antd";
 import GlobalFeed from "@/components/Feed/GlobalFeed";
 import { Content } from "antd/es/layout/layout";
 
-export default function Home() {
+
+export default async function Home() {
   return (
     <Layout
       className="col-12 col-md-10 col-xl-8"
