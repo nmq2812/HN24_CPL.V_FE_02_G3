@@ -1,23 +1,23 @@
 "use client";
+import { signupAction } from "@/actions/authAction";
 import { Button, FormProps, Input, Form } from "antd";
-import { loginAction } from "@/actions/authAction";
-import { useAuth } from "@/contexts/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {capitalizeFirstLetter} from "@/ultis/formatText";
 import toast from "react-hot-toast";
 
-const FormSignup = () => {
+const FormLogin = () => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const { login } = useAuth();
-  const handleLogin: FormProps<LoginCredentials>["onFinish"] = (values) => {
+
+  const handleLogin: FormProps<SignupCredentials>["onFinish"] = async (
+    values
+  ) => {
     setLoading(true);
-    loginAction(values).then((result) => {
+    signupAction(values).then((result) => {
       if (result.success) {
-        login(result.data);
-        toast.success("Sig In successfully");
-        router.replace("/");
+        toast.success("Sign Up successfully");
+        router.replace("/login");
       } else {
         const errors = result.message.errors;
         for (const key in errors) {
@@ -28,18 +28,29 @@ const FormSignup = () => {
       setLoading(false);
     });
   };
-
   return (
     <Form
       name="basic"
       size="large"
       layout="vertical"
-      labelCol={{ span: 6 }}
+      labelCol={{ span: 10 }}
       style={{ maxWidth: 500, margin: "auto" }}
       initialValues={{ remember: true }}
       onFinish={handleLogin}
       autoComplete="on"
     >
+      <Form.Item
+        label="Username"
+        name="username"
+        rules={[
+          {
+            required: true,
+            message: "Please input your username!",
+          },
+        ]}
+      >
+        <Input placeholder="Enter your username" />
+      </Form.Item>
       <Form.Item
         label="Email"
         name="email"
@@ -59,18 +70,49 @@ const FormSignup = () => {
       <Form.Item
         label="Password"
         name="password"
-        rules={[{ required: true, message: "Please input your password!" }]}
+        hasFeedback
+        rules={[
+          {
+            required: true,
+            message: "Please input your password!",
+          },
+        ]}
       >
         <Input.Password placeholder="Enter your password" />
       </Form.Item>
 
+      <Form.Item
+        name="confirm"
+        label="Confirm Password"
+        dependencies={["password"]}
+        hasFeedback
+        rules={[
+          {
+            required: true,
+            message: "Please confirm your password!",
+          },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (!value || getFieldValue("password") === value) {
+                return Promise.resolve();
+              }
+              return Promise.reject(
+                new Error("The new password that you entered do not match!")
+              );
+            },
+          }),
+        ]}
+      >
+        <Input.Password />
+      </Form.Item>
+
       <Form.Item style={{ float: "right" }}>
         <Button type="primary" htmlType="submit" loading={loading}>
-          Sign In
+          Submit
         </Button>
       </Form.Item>
     </Form>
   );
 };
 
-export default FormSignup;
+export default FormLogin;

@@ -1,4 +1,5 @@
-import Button from "@/components/Button/Button";
+import { Button } from "antd";
+
 const NewArticle = () => {
   return (
     <div className="editor-page">
