@@ -17,7 +17,7 @@ export default function MainLayout({
   const [collapsed, setCollapsed] = useState(false);
   const screens = useBreakpoint();
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { colorBgContainer },
   } = theme.useToken();
 
   const onClose = () => {
@@ -25,7 +25,7 @@ export default function MainLayout({
   };
 
   return (
-    <Layout hasSider>
+    <Layout>
       {!screens.md ? (
         <Drawer
           placement="left"
@@ -45,17 +45,35 @@ export default function MainLayout({
           trigger={null}
           collapsed={collapsed}
           collapsible
-          breakpoint="lg"
-          onBreakpoint={(broken) => {
-            setCollapsed(broken);
+          style={{
+            position: "fixed",
+            height: "100vh",
+            left: 0,
+            top: 0,
+            zIndex: 1000,
+            color: "#fff",
+            width: collapsed ? 80 : 200,
           }}
         >
           <Logo />
           <Menu />
         </Sider>
       )}
-      <Layout style={{ minHeight: "100vh" }}>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
+      <Layout
+        style={{
+          marginLeft: screens.md ? (collapsed ? 80 : 200) : 0,
+          minHeight: "100vh",
+        }}
+      >
+        <Header
+          style={{
+            position: "sticky",
+            top: 0,
+            padding: 0,
+            zIndex: 1,
+            background: colorBgContainer,
+          }}
+        >
           <Button
             type="text"
             className="toggle"

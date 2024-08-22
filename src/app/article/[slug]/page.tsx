@@ -18,12 +18,10 @@ function Article({ params }: { params: { slug: string } }) {
   const [like, setLike] = useState(article?.favorited);
 
   useEffect(() => {
-    console.log("hello");
     const token = localStorage.getItem("token");
     if (typeof slug === "string") {
       (async function () {
         const result = await getClickedArticle(slug, token!!);
-        console.log(result);
         setArticle(result.article);
       })();
     } else {
@@ -32,14 +30,12 @@ function Article({ params }: { params: { slug: string } }) {
   }, []);
 
   useEffect(() => {
-    console.log(">>???");
     const token = localStorage.getItem("token");
     like
       ? handleUnlike(article?.slug!!, token!!)
       : handleLike(article?.slug!!, token!!);
   }, [like]);
 
-  console.log(like);
   return (
     <div className="container">
       <div className="article-page">

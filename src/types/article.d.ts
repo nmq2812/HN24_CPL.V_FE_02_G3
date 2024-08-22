@@ -1,5 +1,3 @@
-
-
 interface Article {
   slug: string;
   title: string;
@@ -10,12 +8,7 @@ interface Article {
   updatedAt: string;
   favorited: boolean;
   favoritesCount: number;
-  author: {
-    username: string;
-    bio: string;
-    image: string;
-    following: boolean;
-  };
+  author: User;
 }
 
 interface GlobalArticleParams {

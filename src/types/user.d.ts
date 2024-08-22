@@ -4,6 +4,7 @@ interface User {
   username: string;
   bio: string;
   image: string;
+  following?: boolean;
 }
 interface UserResponse {
   user: User;
