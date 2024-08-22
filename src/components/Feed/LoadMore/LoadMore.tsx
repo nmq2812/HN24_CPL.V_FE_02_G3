@@ -25,7 +25,7 @@ export default function LoadMore() {
     <>
       <Space direction="vertical" size="large" style={{ width: "100%" }}>
         {data.map((article: Article) => (
-          <CardPost article={article} />
+          <CardPost key={article.slug} article={article} />
         ))}
       </Space>
       <section className="d-flex justify-content-center align-items-center">

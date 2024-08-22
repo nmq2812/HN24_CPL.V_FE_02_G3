@@ -4,7 +4,7 @@ import { loginAction } from "@/actions/authAction";
 import { useAuth } from "@/contexts/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import {capitalizeFirstLetter} from "@/ultis/formatText";
+import { capitalizeFirstLetter } from "@/ultis/formatText";
 import toast from "react-hot-toast";
 
 const FormSignup = () => {
@@ -16,7 +16,7 @@ const FormSignup = () => {
     loginAction(values).then((result) => {
       if (result.success) {
         login(result.data);
-        toast.success("Sig In successfully");
+        toast.success("Sign In successfully");
         router.replace("/");
       } else {
         const errors = result.message.errors;

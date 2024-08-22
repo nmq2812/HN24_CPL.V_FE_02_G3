@@ -7,7 +7,7 @@ export default function Login() {
       <div className="container page">
         <div className="row">
           <div className="col-md-6 offset-md-3 col-xs-12 text-bg-light border pt-4">
-            <h1 className="text-xs-center">Sign up</h1>
+            <h1 className="text-xs-center">Sign in</h1>
             <p className="text-xs-center">
               <Link href="/signup">Don't have an account ?</Link>
             </p>
