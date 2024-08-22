@@ -59,7 +59,6 @@ export const getClickedArticle = async (slug: string, token?: string) => {
       favoritesCount: 0,
       author: {
         username: "error",
-        email: "error",
         bio: "error",
         image: "error",
         following: false,

@@ -1,14 +1,14 @@
 "use client";
 import Link from "next/link";
 import { formatDate } from "@/ultis/formatTime";
-import {  Avatar } from "antd";
+import { Avatar } from "antd";
 import Meta from "antd/es/card/Meta";
 
 export default function CardPost({
   author,
   updatedAt,
 }: {
-  author: User;
+  author: Author;
   updatedAt: string;
 }) {
   return (
