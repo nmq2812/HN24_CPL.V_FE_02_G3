@@ -4,7 +4,7 @@ import { loginAction } from "@/actions/authAction";
 import { useAuth } from "@/contexts/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import capitalizeFirstLetter from "@/ultis/capitalize";
+import {capitalizeFirstLetter} from "@/ultis/formatText";
 import toast from "react-hot-toast";
 
 const FormSignup = () => {

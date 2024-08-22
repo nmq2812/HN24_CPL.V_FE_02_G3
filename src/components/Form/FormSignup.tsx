@@ -3,7 +3,7 @@ import { signupAction } from "@/actions/authAction";
 import { Button, FormProps, Input, Form } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import capitalizeFirstLetter  from "@/ultis/capitalize";
+import {capitalizeFirstLetter} from "@/ultis/formatText";
 import toast from "react-hot-toast";
 
 const FormLogin = () => {

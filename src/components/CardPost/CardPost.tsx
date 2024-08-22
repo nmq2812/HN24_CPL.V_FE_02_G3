@@ -1,36 +1,43 @@
+"use client";
 import Link from "next/link";
 import { formatDate } from "@/ultis/formatTime";
+import { Card, Avatar, Typography, Space } from "antd";
+import Meta from "antd/es/card/Meta";
+import { replaceDoubleBackslashN } from "@/ultis/formatText";
+import { formatText } from "@/ultis/textToHTML";
 
-export default function CardPost (infor: any) {
-    <div className="article-preview">
-            <div className="article-meta">
-              <Link href={`/profile/${infor.author.username}`}>
-                <img src={infor.author.image} />
-              </Link>
-              <div className="info">
-                <Link
-                  href={`/profile/${infor.author.username}`}
-                  className="author"
-                >
-                  {infor.author.username}
-                </Link>
-                <span className="date">{formatDate(infor.updatedAt)}</span>
-              </div>
-              <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                <i className="ion-heart"></i> {infor.favoritesCount}
-              </button>
-            </div>
-            <Link href={`article/${infor.slug}`} className="preview-link">
-              <h1>{infor.title}</h1>
-              <p>{infor.description}</p>
-              <span>Read more...</span>
-              <ul className="tag-list">
-                {/* {infor.tagList.map((tag, i) => (
-                  <li className="tag-default tag-pill tag-outline" key={i}>
-                    {tag}
-                  </li>
-                ))} */}
-              </ul>
-            </Link>
-          </div>
+export default function CardPost({ article }: { article: Article }) {
+  const { Title, Paragraph } = Typography;
+  const content = replaceDoubleBackslashN(article.body);
+  return (
+    
+      <Card>
+        <Link href={`/profile/${article.author.username}`} className="author">
+          <Meta
+            avatar={<Avatar src={article.author.image} />}
+            title={article.author.username}
+            style={{
+              paddingBottom: 20,
+              alignItems: "center",
+            }}
+          />
+        </Link>
+        <span className="date">{formatDate(article.updatedAt)}</span>
+        <Typography>
+          <Link href={`article/${article.slug}`} className="preview-link">
+            <Title>{article.title}</Title>
+          </Link>
+          <Paragraph
+            style={{ textAlign: "justify" }}
+            ellipsis={{
+              rows: 3,
+              expandable: true,
+              symbol: "Read more",
+            }}
+          >
+            {formatText(content)}
+          </Paragraph>
+        </Typography>
+      </Card>
+  );
 }

@@ -26,7 +26,7 @@ export default function MainLayout({
 
   return (
     <Layout hasSider>
-      {!screens.md && (
+      {!screens.md ? (
         <Drawer
           placement="left"
           onClose={onClose}
@@ -39,21 +39,21 @@ export default function MainLayout({
           <Logo />
           <Menu />
         </Drawer>
+      ) : (
+        <Sider
+          className="sideBar hideOnMobile"
+          trigger={null}
+          collapsed={collapsed}
+          collapsible
+          breakpoint="lg"
+          onBreakpoint={(broken) => {
+            setCollapsed(broken);
+          }}
+        >
+          <Logo />
+          <Menu />
+        </Sider>
       )}
-
-      <Sider
-        className="sideBar hideOnMobile"
-        trigger={null}
-        collapsed={collapsed}
-        collapsible
-        breakpoint="lg"
-        onBreakpoint={(broken) => {
-          setCollapsed(broken);
-        }}
-      >
-        <Logo />
-        <Menu />
-      </Sider>
       <Layout style={{ minHeight: "100vh" }}>
         <Header style={{ padding: 0, background: colorBgContainer }}>
           <Button
