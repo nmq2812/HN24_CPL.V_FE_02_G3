@@ -2,18 +2,17 @@
 import { getClickedArticle } from "@/actions/handleArticle";
 import { handleLike, handleUnlike } from "@/actions/handleLike";
 import { LikeOutlined, CommentOutlined, LikeFilled } from "@ant-design/icons";
-import { Space, Card, Avatar, Typography, Button } from "antd";
+import { Space, Card, Avatar, Typography, Button, List } from "antd";
 import Meta from "antd/es/card/Meta";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-function Article({ params }: { params: { slug: string } }) {
-  const slug = params.slug;
 
+function Post({ params }: { params: { slug: string } }) {
+    const { Title, Paragraph, Text } = Typography;
+    const slug = params.slug;
+    const [article, setArticle] = useState<Article>();
 
-  const { Title, Paragraph, Text } = Typography;
-  const [article, setArticle] = useState<Article>();
 
   const [like, setLike] = useState(article?.favorited);
 
@@ -86,6 +85,7 @@ function Article({ params }: { params: { slug: string } }) {
       </div>
     </div>
   );
+
 }
 
-export default Article;
+export default Post;
