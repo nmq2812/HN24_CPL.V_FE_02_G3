@@ -10,9 +10,10 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
-    "antd": "^5.20.1",
+    "antd": "^5.20.2",
     "axios": "^1.7.3",
     "conduit": "file:",
+    "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "next": "14.2.5",
     "nookies": "^2.5.2",
@@ -23,6 +24,7 @@
     "react-intersection-observer": "^9.13.0"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
