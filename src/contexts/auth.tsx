@@ -11,6 +11,7 @@ import { setCookie, destroyCookie, parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
 import { getCurrentUser } from "@/actions/authAction";
 import { jwtDecode } from "jwt-decode";
+import toast from "react-hot-toast";
 
 interface AuthContextType {
   user: User | null;
@@ -75,6 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsAuthenticated(false);
     destroyCookie(null, "isAuthenticated");
     localStorage.removeItem("token");
+    toast.success("Sign out successfully");
     route.push("/");
   };
 

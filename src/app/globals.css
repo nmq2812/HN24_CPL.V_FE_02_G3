@@ -6,3 +6,9 @@ html {
   outline: none;
   box-shadow: none;
 }
+.ant-card-meta-title {
+  margin: 0 !important;
+}
+.ant-card-meta-description {
+  line-height: 10px;
+}

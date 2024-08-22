@@ -4,6 +4,7 @@ interface User {
   username: string;
   bio: string;
   image: string;
+  following?: boolean;
 }
 interface UserResponse {
   user: User;
@@ -11,6 +12,13 @@ interface UserResponse {
 interface LoginCredentials {
   email: string;
   password: string;
+}
+
+interface Author {
+  username: string;
+  bio: string;
+  image: string;
+  following: boolean;
 }
 
 interface SignupCredentials {

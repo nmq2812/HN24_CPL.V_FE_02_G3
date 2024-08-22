@@ -15,7 +15,6 @@ export const getArticles = async ({
       ...(favorited && { favorited }),
       ...(tag && { tag }),
     });
-    console.log(limit, page, queryParams.toString());
     const response = await fetch(`${BASE_URL}/articles?${queryParams}`);
     const res = await response.json();
     if (response.status === 200) {
@@ -38,11 +37,11 @@ export const getArticles = async ({
   }
 };
 
-export const getClickedArticle = async (slug: string, token: string) => {
+export const getClickedArticle = async (slug: string, token?: string) => {
   try {
     const response = await fetch(`${BASE_URL}/articles/${slug}`, {
       method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: token ? `Bearer ${token}` : "" },
     });
 
     const res = await response.json();

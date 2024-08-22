@@ -20,6 +20,7 @@ export default function ProfilePage({
     }, []);
     console.log(profile?.username);
 
+
     return (
         <div className="profile-page">
             <div className="user-info">
