@@ -9,7 +9,7 @@ import {
 } from "react";
 import { setCookie, destroyCookie, parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
-import { getCurrentUser } from "@/actions";
+import { getCurrentUser } from "@/actions/authAction";
 import { jwtDecode } from "jwt-decode";
 
 interface AuthContextType {
@@ -34,9 +34,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const cookies = parseCookies();
       const token = localStorage.getItem("token");
       if (cookies.isAuthenticated === "true" && token && !isExpired(token)) {
-        await getCurrentUser(token)
-          .then((user) => login(user.user))
-          .catch();
+        await getCurrentUser(token).then((result) => {
+          if (result.success) {
+            login(result.data);
+          } else {
+            setUser(null);
+            setIsAuthenticated(false);
+            destroyCookie(null, "isAuthenticated");
+            localStorage.removeItem("token");
+          }
+        });
       }
       setLoading(false);
     })();
@@ -67,8 +74,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     setIsAuthenticated(false);
     destroyCookie(null, "isAuthenticated");
-    route.push("/");
     localStorage.removeItem("token");
+    route.push("/");
   };
 
   const contextValue = useMemo(
