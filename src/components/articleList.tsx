@@ -1,8 +1,9 @@
 "use client";
 import { getArticles } from "@/actions/handleArticle";
-import { Avatar, notification } from "antd";
+import { Avatar, Card, notification } from "antd";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import CardPost from "./CardPost";
 
 interface ArticlesProp {
     articles: Article[];
@@ -40,44 +41,7 @@ const GlobalFeedList = ({ articles }: ArticlesProp) => {
             {articles !== undefined ? (
                 articles.map((item, index) => (
                     <div className="article-preview" key={index}>
-                        <div className="article-meta">
-                            <Link href={`/profile/${item.author.username}`}>
-                                <Avatar src={item.author.image} />
-                            </Link>
-                            <div className="info">
-                                <Link
-                                    href={`/profile/${item.author.username}`}
-                                    className="author"
-                                >
-                                    {item.author.username}
-                                </Link>
-                                <span className="date">
-                                    {formatDate(item.updatedAt)}
-                                </span>
-                            </div>
-                            <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                                <i className="ion-heart"></i>{" "}
-                                {item.favoritesCount}
-                            </button>
-                        </div>
-                        <Link
-                            href={`article/${item.slug}`}
-                            className="preview-link"
-                        >
-                            <h1>{item.title}</h1>
-                            <p>{item.description}</p>
-                            <span>Read more...</span>
-                            <ul className="tag-list">
-                                {item.tagList.map((tag, i) => (
-                                    <li
-                                        className="tag-default tag-pill tag-outline"
-                                        key={i}
-                                    >
-                                        {tag}
-                                    </li>
-                                ))}
-                            </ul>
-                        </Link>
+                        <CardPost article={item}></CardPost>
                     </div>
                 ))
             ) : (
@@ -94,15 +58,3 @@ const PersonalFeedList = () => {
     </div>
   );
 };
-
-function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-
-  return new Intl.DateTimeFormat("en-US", options).format(date);
-}

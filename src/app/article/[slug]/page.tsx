@@ -2,15 +2,14 @@
 import { getClickedArticle } from "@/actions/handleArticle";
 import { handleLike, handleUnlike } from "@/actions/handleLike";
 import { LikeOutlined, CommentOutlined, LikeFilled } from "@ant-design/icons";
-import { Space, Card, Avatar, Typography, Button } from "antd";
+import { Space, Card, Avatar, Typography, Button, List } from "antd";
 import Meta from "antd/es/card/Meta";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-function Article() {
+function Post({ param }: { param: { slug: string } }) {
     const { Title, Paragraph, Text } = Typography;
-    const slug = usePathname().split("/")[2];
+    const slug = param.slug;
     const [article, setArticle] = useState<Article>();
 
     const [like, setLike] = useState(article?.favorited);
@@ -68,14 +67,25 @@ function Article() {
                             >
                                 Like
                             </Button>
-                            <Button
-                                type="default"
-                                icon={<CommentOutlined />}
-                                onClick={() => console.log("Commented!")}
-                            >
-                                Comment
-                            </Button>
                         </Typography>
+
+                        <List
+                            itemLayout="vertical"
+                            size="large"
+                            pagination={{
+                                onChange: (page) => {
+                                    console.log(page);
+                                },
+                                pageSize: 3,
+                            }}
+                            // dataSource={data}
+                            footer={
+                                <div>
+                                    <b>ant design</b> footer part
+                                </div>
+                            }
+                            renderItem={(item) => <div className=""></div>}
+                        />
                     </Card>
                 </Space>
             </div>
@@ -83,4 +93,4 @@ function Article() {
     );
 }
 
-export default Article;
+export default Post;
