@@ -9,6 +9,8 @@ const SettingsPage: React.FC = () => {
     const [bio, setBio] = useState<string | undefined>(undefined);
     const [email, setEmail] = useState<string | undefined>(undefined);
 
+    const token = localStorage.getItem("token");
+
     const handleUpdateSettings = async (e: React.FormEvent) => {
         e.preventDefault();
         const userData: {
@@ -27,7 +29,7 @@ const SettingsPage: React.FC = () => {
             return;
         }
         try {
-            await putUser(userData);
+            await putUser(userData, token!!);
             console.log("Settings updated successfully");
             // Bạn có thể thêm thông báo thành công hoặc điều hướng về trang khác sau khi cập nhật thành công
         } catch (error) {
@@ -36,11 +38,6 @@ const SettingsPage: React.FC = () => {
         }
 
         console.log("Settings updated", { image, username, bio, email });
-    };
-
-    const handleLogout = () => {
-        // Xử lý logic đăng xuất tại đây
-        console.log("User logged out");
     };
 
     return (

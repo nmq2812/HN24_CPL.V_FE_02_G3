@@ -1,5 +1,3 @@
-import Cookies from "js-cookie";
-
 interface UserData {
     email?: string;
     username?: string;
@@ -7,10 +5,11 @@ interface UserData {
     image?: string;
 }
 
-export async function putUser(userData: UserData): Promise<void> {
+export async function putUser(
+    userData: UserData,
+    token: string
+): Promise<void> {
     try {
-        const token = Cookies.get("token");
-
         if (!token) {
             throw new Error("User is not authenticated");
         }

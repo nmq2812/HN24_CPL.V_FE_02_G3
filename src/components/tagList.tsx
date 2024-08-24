@@ -4,59 +4,68 @@ import { Col, Input, Tag, Tooltip } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { ChangeEvent, useEffect, useState } from "react";
 import { getTags } from "@/actions/handleTags";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
+const TagList: React.FC = () => {
+    const [searchValue, setSearchValue] = useState<string>("");
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-const TagList = () => {
-    
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const current = new URLSearchParams(Array.from(searchParams.entries()));
+    const [tags, setTags] = useState<string[]>();
 
-  //Thêm dữ liệu query
-  current.set("query", "232");
-  const query = current.toString();
+    useEffect(() => {
+        (async function () {
+            setTags(await getTags());
+        })();
+    }, []);
 
-  router.push(`${pathname}?${query}`);
+    const handleTagChange = (value: string) => {
+        if (selectedTags.includes(value)) {
+            setSelectedTags(selectedTags.filter((tag) => tag !== value));
+        } else {
+            setSelectedTags([...selectedTags, value]);
+        }
+    };
 
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearchValue(e.target.value);
+    };
 
-  const [tags, setTags] = useState<string[]>();
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const handleTagClick = (tag: string) => {
+        setSelectedTags((prev) => {
+            if (prev.includes(tag)) {
+                return prev.filter((t) => t !== tag);
+            } else {
+                return [...prev, tag];
+            }
+        });
+    };
 
-  useEffect(() => {
-    (async function () {
-      setTags(await getTags());
-    })();
-  }, []);
+    const filteredTags = tags?.filter((tag) => tag.includes(searchValue));
 
-  const handleTagChange = (value: string) => {
-    if (selectedTags.includes(value)) {
-      setSelectedTags(selectedTags.filter((tag) => tag !== value));
-    } else {
-      setSelectedTags([...selectedTags, value]);
-    }
-  };
-
-  return (
-    <Col>
-      <Input.Search
-        placeholder="Tìm kiếm thẻ tag"
-        style={{ marginBottom: 20 }}
-      />
-      <div>
-        {tags?.map((tag) => (
-          <Tag.CheckableTag
-            key={tag}
-            checked={selectedTags.includes(tag)}
-            onChange={() => handleTagChange(tag)}
-          >
-            {tag}
-          </Tag.CheckableTag>
-        ))}
-      </div>
-    </Col>
-  );
+    return (
+        <div>
+            <Input
+                placeholder="Search tag"
+                prefix={<SearchOutlined />}
+                value={searchValue}
+                onChange={handleSearch}
+            />
+            <div style={{ marginTop: 16 }}>
+                {filteredTags?.map((tag) => (
+                    <Tooltip title={tag} key={tag}>
+                        <Tag
+                            color={
+                                selectedTags.includes(tag) ? "blue" : "default"
+                            }
+                            onClick={() => handleTagClick(tag)}
+                            style={{ cursor: "pointer", marginBottom: 8 }}
+                        >
+                            {tag}
+                        </Tag>
+                    </Tooltip>
+                ))}
+            </div>
+        </div>
+    );
 };
 
 export default TagList;
