@@ -5,7 +5,14 @@ import { Layout, Row, Col } from "antd";
 import GlobalFeed from "@/components/Feed/GlobalFeed";
 import { Content } from "antd/es/layout/layout";
 
-export default function Home() {
+export default function Home({
+  params,
+  searchParams,
+}: {
+  params: { slug: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  console.log("ADASDASD", searchParams);
   return (
     <Layout
       className="col-12 col-md-10 col-xl-8"
@@ -26,6 +33,7 @@ export default function Home() {
               // position: "-webkit-sticky",
               position: "sticky",
               top: "80px",
+              right: 0,
             }}
           >
             <TagList />

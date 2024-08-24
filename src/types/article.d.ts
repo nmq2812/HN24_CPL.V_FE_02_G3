@@ -8,7 +8,7 @@ interface Article {
   updatedAt: string;
   favorited: boolean;
   favoritesCount: number;
-  author: Author;
+  author: Profile;
 }
 
 interface GlobalArticleParams {
