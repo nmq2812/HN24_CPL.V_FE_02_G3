@@ -3,7 +3,7 @@ import CardPost from "../CardPost/CardPost";
 import LoadMore from "../LoadMore/LoadMore";
 import { Space } from "antd";
 
-export default async function Feed({
+export default async function FollowingFeed({
     fetchUrl,
     optionals,
     token,
