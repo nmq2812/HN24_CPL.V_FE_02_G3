@@ -8,10 +8,10 @@ interface Article {
   updatedAt: string;
   favorited: boolean;
   favoritesCount: number;
-  author: Author;
+  author: Profile;
 }
 
-interface GlobalArticleParams {
+interface OptionalArticleParams {
   limit: number;
   page: number;
   author?: string;

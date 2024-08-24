@@ -1,69 +1,69 @@
-const BASE_URL = "https://node-express-conduit.appspot.com/api";
+const NEXT_PUBLIC_BASE_BACKEND_URL =
+  "https://node-express-conduit.appspot.com/api";
 
-export const getArticles = async ({
-    limit,
-    page,
-    tag,
-    author,
-    favorited,
-}: GlobalArticleParams) => {
-    try {
-        const queryParams = new URLSearchParams({
-            limit: limit.toString(),
-            page: page.toString(),
-            ...(author && { author }),
-            ...(favorited && { favorited }),
-            ...(tag && { tag }),
-        });
-        const response = await fetch(`${BASE_URL}/articles?${queryParams}`);
-        const res = await response.json();
-        if (response.status === 200) {
-            return { success: true, data: res.articles };
-        } else {
-            if (response.status === 401 || response.status === 422) {
-                return { success: false, message: res };
-            } else {
-                return {
-                    success: false,
-                    message: { errors: { message: "Unexpected error" } },
-                };
-            }
-        }
-    } catch (error) {
-        return {
-            success: false,
-            message: { errors: { message: "An error occurred" } },
-        };
-    }
+export const getArticles = async (
+  fetchUrl: string,
+  { limit, page, tag, author, favorited }: OptionalArticleParams,
+  token?: string
+) => {
+  try {
+    //Query
+    const queryParams = new URLSearchParams({
+      limit: limit.toString(),
+      page: page.toString(),
+      ...(author && { author }),
+      ...(favorited && { favorited }),
+      ...(tag && { tag }),
+    });
+    const url = NEXT_PUBLIC_BASE_BACKEND_URL + fetchUrl + "?" + queryParams;
+
+    //Fetch data
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { Authorization: token ? `Bearer ${token}` : "" },
+    });
+    const res = await response.json();
+    const nextPage =
+      res.articlesCount > Number(process.env.NEXT_PUBLIC_LIMIT_ARTICLE) * page;
+
+    return { success: true, data: res.articles, nextPage: nextPage };
+    // }
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getClickedArticle = async (slug: string, token?: string) => {
-    try {
-        const response = await fetch(`${BASE_URL}/articles/${slug}`, {
-            method: "GET",
-            headers: { Authorization: token ? `Bearer ${token}` : "" },
-        });
+  try {
+    const response = await fetch(
+      `${NEXT_PUBLIC_BASE_BACKEND_URL}/articles/${slug}`,
+      {
+        method: "GET",
+        headers: { Authorization: token ? `Bearer ${token}` : "" },
+      }
+    );
 
-        const res = await response.json();
-        return res;
-    } catch {
-        const result: Article = {
-            slug: "error",
-            title: "error",
-            description: "error",
-            body: "error",
-            tagList: [],
-            createdAt: "",
-            updatedAt: "",
-            favorited: false,
-            favoritesCount: 0,
-            author: {
-                username: "error",
-                bio: "error",
-                image: "error",
-                following: false,
-            },
-        };
-        return result;
-    }
+    const res = await response.json();
+    return res;
+  } catch {
+    const result: Article = {
+      slug: "error",
+      title: "error",
+      description: "error",
+      body: "error",
+      tagList: [],
+      createdAt: "",
+      updatedAt: "",
+      favorited: false,
+      favoritesCount: 0,
+      author: {
+        username: "error",
+        bio: "error",
+        image: "error",
+        admin: false,
+        following: false,
+      },
+    };
+    return result;
+  }
 };

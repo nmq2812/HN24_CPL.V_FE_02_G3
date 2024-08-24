@@ -5,7 +5,15 @@ import { Space, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
-export default function LoadMore() {
+export default function LoadMore({
+  fetchUrl,
+  optionals,
+  token,
+}: {
+  fetchUrl: string;
+  optionals?: { [key: string]: string | string[] | undefined };
+  token?: string;
+}) {
   const { ref, inView } = useInView();
   const [page, setPage] = useState<number | null>(2);
   const [data, setData] = useState<Article[]>([]);
@@ -13,10 +21,19 @@ export default function LoadMore() {
   useEffect(() => {
     if (inView) {
       if (page === null) return;
-      getArticles({ limit: 4, page: page })
-        .then((articles) => {
-          setData([...data, ...articles.data]);
-          setPage(page + 1);
+      getArticles(
+        fetchUrl,
+        {
+          limit: 4,
+          page: page,
+          ...optionals,
+        },
+        token
+      )
+        .then((res) => {
+          console.log(res);
+          setData([...data, ...res.data]);
+          setPage(res.nextPage ? page + 1 : null);
         })
         .catch(() => setPage(null));
     }
@@ -27,12 +44,16 @@ export default function LoadMore() {
         {data.map((article: Article) => (
           <CardPost key={article.slug} article={article} />
         ))}
+        {page ? (
+          <section className="d-flex justify-content-center align-items-center">
+            <div ref={ref}>
+              <Spin size="large" />
+            </div>
+          </section>
+        ) : (
+          <div>Đã hết bài viết</div>
+        )}
       </Space>
-      <section className="d-flex justify-content-center align-items-center">
-        <div ref={ref}>
-          <Spin size="large" />
-        </div>
-      </section>
     </>
   );
 }

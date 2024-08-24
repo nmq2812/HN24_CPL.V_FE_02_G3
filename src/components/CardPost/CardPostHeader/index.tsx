@@ -8,7 +8,7 @@ export default function CardPost({
   author,
   updatedAt,
 }: {
-  author: Author;
+  author: Profile;
   updatedAt: string;
 }) {
   return (

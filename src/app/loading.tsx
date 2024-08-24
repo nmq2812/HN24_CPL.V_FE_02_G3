@@ -5,7 +5,7 @@ import { Content } from "antd/es/layout/layout";
 import React, { ReactNode } from "react";
 export default function Loading() {
   const cards: ReactNode = Array.from(
-    { length: Number(process.env.NEXT_PUBLIC_LIMIT_ARTICLE) },
+    { length: Number(process.env.NEXT_PUBLIC_NEXT_PUBLIC_LIMIT_ARTICLE) },
     (_, index) => (
       <Card key={index} loading={true}>
         <Card.Meta
