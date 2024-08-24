@@ -6,18 +6,18 @@ import { Space, Card, Avatar, Typography, Button, List } from "antd";
 import Meta from "antd/es/card/Meta";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
+import { parseCookies } from "nookies";
 
 function Post({ params }: { params: { slug: string } }) {
-    const { Title, Paragraph, Text } = Typography;
-    const slug = params.slug;
-    const [article, setArticle] = useState<Article>();
-
+  const { Title, Paragraph, Text } = Typography;
+  const slug = params.slug;
+  const [article, setArticle] = useState<Article>();
 
   const [like, setLike] = useState(article?.favorited);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const cookies = parseCookies();
+    const token = cookies.token;
     if (typeof slug === "string") {
       (async function () {
         const result = await getClickedArticle(slug, token!!);
@@ -29,7 +29,8 @@ function Post({ params }: { params: { slug: string } }) {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const cookies = parseCookies();
+    const token = cookies.token;
     like
       ? handleUnlike(article?.slug!!, token!!)
       : handleLike(article?.slug!!, token!!);
@@ -81,7 +82,6 @@ function Post({ params }: { params: { slug: string } }) {
       </div>
     </div>
   );
-
 }
 
 export default Post;

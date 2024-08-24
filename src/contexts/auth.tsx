@@ -15,7 +15,6 @@ import toast from "react-hot-toast";
 
 interface AuthContextType {
   user: User | null;
-  isAuthenticated: boolean;
   loading: boolean;
   login: (user: User) => void;
   logout: () => void;
@@ -27,22 +26,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const route = useRouter();
   const cookies = parseCookies();
   const [user, setUser] = useState<User | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     (async () => {
       const cookies = parseCookies();
-      const token = localStorage.getItem("token");
+      const token = cookies.token;
       if (cookies.isAuthenticated === "true" && token && !isExpired(token)) {
         await getCurrentUser(token).then((result) => {
           if (result.success) {
             login(result.data);
           } else {
             setUser(null);
-            setIsAuthenticated(false);
             destroyCookie(null, "isAuthenticated");
-            localStorage.removeItem("token");
+            destroyCookie(null, "token");
           }
         });
       }
@@ -62,27 +59,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const login = (user: User) => {
+    const decodedToken = jwtDecode(user.token);
+    const currentTime = Math.floor(Date.now() / 1000);
     setUser(user);
     setCookie(null, "isAuthenticated", "true", {
-      maxAge: 30 * 24 * 60 * 60,
+      maxAge: decodedToken.exp!! - currentTime,
       path: "/",
     });
-    setIsAuthenticated(true);
-    localStorage.setItem("token", user.token);
+    setCookie(null, "token", user.token, {
+      maxAge: decodedToken.exp!! - currentTime,
+      path: "/",
+    });
   };
 
   const logout = () => {
     setUser(null);
-    setIsAuthenticated(false);
     destroyCookie(null, "isAuthenticated");
-    localStorage.removeItem("token");
+    destroyCookie(null, "token");
     toast.success("Sign out successfully");
     route.push("/");
   };
 
   const contextValue = useMemo(
-    () => ({ user, isAuthenticated, loading, login, logout }),
-    [user, isAuthenticated, loading]
+    () => ({ user, loading, login, logout }),
+    [user, loading]
   );
 
   return (

@@ -11,7 +11,7 @@ interface Article {
   author: Profile;
 }
 
-interface GlobalArticleParams {
+interface OptionalArticleParams {
   limit: number;
   page: number;
   author?: string;
