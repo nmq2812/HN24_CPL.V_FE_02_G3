@@ -10,16 +10,16 @@ import { Comments } from "@/types/comments";
 import Meta from "antd/es/card/Meta";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
+import { parseCookies } from "nookies";
 
 function Post({ params }: { params: { slug: string } }) {
+
   const { Title, Paragraph } = Typography;
   const slug = params.slug;
   const [article, setArticle] = useState<Article>();
   const [commentText, setCommentText] = useState("");
 
   const [comments, setComments] = useState<Comments[]>([]);
-
 
   const [like, setLike] = useState(article?.favorited);
 
@@ -166,7 +166,6 @@ function Post({ params }: { params: { slug: string } }) {
       </div>
     </div>
   );
-
 }
 
 export default Post;

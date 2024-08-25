@@ -17,56 +17,56 @@ export default function MyMenu() {
   const { user, logout } = useAuth();
   const [selectedKey, setSelectedKey] = useState<string>("home");
   const MenuList = [
-    {
-      key: "home",
-      label: "Home",
-      icon: <HomeOutlined />,
-      requireAuth: false,
-      href: "/",
-    },
-    {
-      key: "follow",
-      label: "Following",
-      icon: <PlusCircleOutlined />,
-      requireAuth: true,
-      href: "/",
-    },
-    {
-      key: "favorites",
-      label: "Favorites",
-      icon: <HeartOutlined />,
-      requireAuth: true,
-      href: "/",
-    },
-    {
-      key: "profile",
-      label: "Profile",
-      icon: <UserOutlined />,
-      requireAuth: true,
-      href: "/profile",
-    },
-    {
-      key: "settings",
-      label: "Settings",
-      icon: <SettingOutlined />,
-      requireAuth: false,
-      href: "/",
-    },
-    {
-      key: "signIn",
-      label: "Sign In",
-      icon: <LoginOutlined />,
-      requireAuth: false,
-      href: "/login",
-    },
-    {
-      key: "signOut",
-      label: "Sign Out",
-      icon: <LoginOutlined />,
-      requireAuth: true,
-      href: "/",
-      onClick: logout,
-    },
+      {
+          key: "home",
+          label: "Home",
+          icon: <HomeOutlined />,
+          requireAuth: false,
+          href: "/",
+      },
+      {
+          key: "follow",
+          label: "Following",
+          icon: <PlusCircleOutlined />,
+          requireAuth: true,
+          href: "/following",
+      },
+      {
+          key: "favorites",
+          label: "Favorites",
+          icon: <HeartOutlined />,
+          requireAuth: true,
+          href: "/favorites",
+      },
+      {
+          key: "profile",
+          label: "Profile",
+          icon: <UserOutlined />,
+          requireAuth: true,
+          href: "/profile",
+      },
+      {
+          key: "settings",
+          label: "Settings",
+          icon: <SettingOutlined />,
+          requireAuth: false,
+          href: "/",
+      },
+      {
+          key: "signIn",
+          label: "Sign In",
+          icon: <LoginOutlined />,
+          requireAuth: false,
+          href: "/login",
+      },
+      {
+          key: "signOut",
+          label: "Sign Out",
+          icon: <LoginOutlined />,
+          requireAuth: true,
+          href: "/",
+          onClick: logout,
+      },
   ];
 
   const name = user?.username;

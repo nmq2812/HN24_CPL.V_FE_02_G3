@@ -1,8 +1,9 @@
-const BASE_URL = "https://node-express-conduit.appspot.com/api";
+const NEXT_PUBLIC_BASE_BACKEND_URL =
+    "https://node-express-conduit.appspot.com/api";
 
 export const getComment = async (slug: string) => {
     try {
-        const response = fetch(`${BASE_URL}/articles/${slug}/comments`, {
+        const response = fetch(`${NEXT_PUBLIC_BASE_BACKEND_URL}/articles/${slug}/comments`, {
             method: "GET",
         });
 
@@ -15,11 +16,12 @@ export const getComment = async (slug: string) => {
     } catch (error) {
         throw error;
     }
-};
+}
+
 
 export const deleteComment = async (slug: string, id: string, token: string) => {
     try {
-        const response = fetch(`${BASE_URL}/articles/${slug}/comments/${id}`, {
+        const response = fetch(`${NEXT_PUBLIC_BASE_BACKEND_URL}/articles/${slug}/comments/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -38,7 +40,7 @@ export const deleteComment = async (slug: string, id: string, token: string) => 
 
 export const postComent = async (slug: string, token: string, body: string) => {
     try {
-        const response = fetch(`${BASE_URL}/articles/${slug}/comments`, {
+        const response = fetch(`${NEXT_PUBLIC_BASE_BACKEND_URL}/articles/${slug}/comments`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

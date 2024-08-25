@@ -1,13 +1,14 @@
-import axios from "../libs/axios";
+"use server";
 
 export const getTags = async (): Promise<string[]> => {
-    try {
-        const response = await axios.get(
-            "https://node-express-conduit.appspot.com/api/tags"
-        );
-        return response.data.tags;
-    } catch (error) {
-        console.error("Error fetching the tags:", error);
-        return [];
-    }
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_BACKEND_URL}/tags`
+    );
+    const res = await response.json();
+    return res.tags;
+  } catch (error) {
+    console.error("Error fetching the tags:", error);
+    return [];
+  }
 };

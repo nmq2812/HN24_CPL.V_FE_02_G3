@@ -1,14 +1,18 @@
 "use server";
 
-const BASE_URL = "https://node-express-conduit.appspot.com/api";
+const NEXT_PUBLIC_BASE_BACKEND_URL =
+  "https://node-express-conduit.appspot.com/api";
 
 export const loginAction = async (credentials: LoginCredentials) => {
   try {
-    const response = await fetch(`${BASE_URL}/users/login`, {
-      method: "POST",
-      body: JSON.stringify({ user: credentials }),
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      `${NEXT_PUBLIC_BASE_BACKEND_URL}/users/login`,
+      {
+        method: "POST",
+        body: JSON.stringify({ user: credentials }),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
     const res = await response.json();
     if (response.status === 200) {
@@ -33,7 +37,7 @@ export const loginAction = async (credentials: LoginCredentials) => {
 
 export const signupAction = async (credentials: SignupCredentials) => {
   try {
-    const response = await fetch(`${BASE_URL}/users`, {
+    const response = await fetch(`${NEXT_PUBLIC_BASE_BACKEND_URL}/users`, {
       method: "POST",
       body: JSON.stringify({ user: credentials }),
       headers: { "Content-Type": "application/json" },
@@ -62,7 +66,7 @@ export const signupAction = async (credentials: SignupCredentials) => {
 
 export const getCurrentUser = async (token: string) => {
   try {
-    const response = await fetch(`${BASE_URL}/user`, {
+    const response = await fetch(`${NEXT_PUBLIC_BASE_BACKEND_URL}/user`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
