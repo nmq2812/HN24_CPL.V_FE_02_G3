@@ -35,7 +35,7 @@ export default function ProfilePage({
                                         alt="profile avatar"
                                     />
                                     <h4>{profile?.username}</h4>
-                                    <p></p>
+                                    <p>{profile?.bio}</p>
                                     <a
                                         className="btn btn-sm btn-outline-secondary action-btn"
                                         href="/settings"

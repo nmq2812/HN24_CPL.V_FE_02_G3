@@ -1,4 +1,5 @@
 "use server";
+
 export const handleLike = async (slug: string, token: string) => {
     try {
         const response = await fetch(
