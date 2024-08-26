@@ -1,5 +1,5 @@
 "use client";
-import { getProfile } from "@/apis/profile";
+import { getProfile } from "@/actions/handleProfile";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { List } from "antd";
@@ -18,8 +18,6 @@ export default function ProfilePage({
             setProfile(profile);
         })();
     }, []);
-    console.log(profile?.username);
-
 
     return (
         <div className="profile-page">

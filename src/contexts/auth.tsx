@@ -24,60 +24,69 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const route = useRouter();
-  const cookies = parseCookies();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    (async () => {
-      const cookies = parseCookies();
-      const token = cookies.token;
-      if (cookies.isAuthenticated === "true" && token && !isExpired(token)) {
-        await getCurrentUser(token).then((result) => {
-          if (result.success) {
-            login(result.data);
-          } else {
-            setUser(null);
-            destroyCookie(null, "isAuthenticated");
-            destroyCookie(null, "token");
+      (async () => {
+          const cookies = parseCookies();
+          const token = cookies.token;
+          if (
+              cookies.isAuthenticated === "true" &&
+              token &&
+              !isExpired(token)
+          ) {
+              await getCurrentUser(token).then((result) => {
+                  if (result.success) {
+                      login(result.data);
+                  } else {
+                      setUser(null);
+                      destroyCookie(null, "isAuthenticated");
+                      destroyCookie(null, "token");
+                      destroyCookie(null, "username");
+                  }
+              });
           }
-        });
-      }
-      setLoading(false);
-    })();
+          setLoading(false);
+      })();
   }, []);
 
   const isExpired = (token: string) => {
-    try {
-      const decodedToken = jwtDecode(token);
-      const currentTime = Math.floor(Date.now() / 1000);
-      return decodedToken.exp ? decodedToken.exp < currentTime : true;
-    } catch (error) {
-      console.error("Token không hợp lệ: ", error);
-      return true;
-    }
+      try {
+          const decodedToken = jwtDecode(token);
+          const currentTime = Math.floor(Date.now() / 1000);
+          return decodedToken.exp ? decodedToken.exp < currentTime : true;
+      } catch (error) {
+          console.error("Token không hợp lệ: ", error);
+          return true;
+      }
   };
 
   const login = (user: User) => {
-    const decodedToken = jwtDecode(user.token);
-    const currentTime = Math.floor(Date.now() / 1000);
-    setUser(user);
-    setCookie(null, "isAuthenticated", "true", {
-      maxAge: decodedToken.exp!! - currentTime,
-      path: "/",
-    });
-    setCookie(null, "token", user.token, {
-      maxAge: decodedToken.exp!! - currentTime,
-      path: "/",
-    });
+      const decodedToken = jwtDecode(user.token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      setUser(user);
+      setCookie(null, "isAuthenticated", "true", {
+          maxAge: decodedToken.exp!! - currentTime,
+          path: "/",
+      });
+      setCookie(null, "token", user.token, {
+          maxAge: decodedToken.exp!! - currentTime,
+          path: "/",
+      });
+      setCookie(null, "username", user.username, {
+          maxAge: decodedToken.exp!! - currentTime,
+          path: "/",
+      });
   };
 
   const logout = () => {
-    setUser(null);
-    destroyCookie(null, "isAuthenticated");
-    destroyCookie(null, "token");
-    toast.success("Sign out successfully");
-    route.push("/");
+      setUser(null);
+      destroyCookie(null, "isAuthenticated");
+      destroyCookie(null, "token");
+      destroyCookie(null, "username");
+      toast.success("Sign out successfully");
+      route.push("/");
   };
 
   const contextValue = useMemo(

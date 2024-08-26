@@ -43,14 +43,7 @@ export default function MyMenu() {
           label: "Profile",
           icon: <UserOutlined />,
           requireAuth: true,
-          href: "/profile",
-      },
-      {
-          key: "settings",
-          label: "Settings",
-          icon: <SettingOutlined />,
-          requireAuth: false,
-          href: "/",
+          href: `/profile/${user?.username}`,
       },
       {
           key: "signIn",
@@ -69,43 +62,28 @@ export default function MyMenu() {
       },
   ];
 
-  const name = user?.username;
   const cookies = parseCookies();
   const pathname = usePathname();
   const isAuthenticated = cookies.isAuthenticated === "true";
 
   const addLinkList = MenuList.map((item) => {
-    if (item.key === "profile") {
       return {
-        ...item,
-        href: `/profile/${name}`,
-        label: (
-          <Link
-            className="nav-link"
-            href={isAuthenticated ? `/profile/${name}` : "/"}
-          >
-            Profile
-          </Link>
-        ),
+          ...item,
+          label: (
+              <Link className="nav-link" href={item.href}>
+                  {item.label}
+              </Link>
+          ),
       };
-    }
-    return {
-      ...item,
-      label: (
-        <Link className="nav-link" href={item.href}>
-          {item.label}
-        </Link>
-      ),
-    };
   });
 
   const filterItem = addLinkList.filter(
-    (item) => item.requireAuth === isAuthenticated || item.key === "home"
+      (item) => item.requireAuth === isAuthenticated || item.key === "home"
   );
   useEffect(() => {
-    const matchingMenu = filterItem.find((item) => pathname === item.href);
-    setSelectedKey(matchingMenu ? matchingMenu.key : "");
-  }, [isAuthenticated, pathname]);
+      const matchingMenu = filterItem.find((item) => pathname === item.href);
+      setSelectedKey(matchingMenu ? matchingMenu.key : "");
+  }, [isAuthenticated, pathname, user?.username]);
 
   return (
     <Menu
