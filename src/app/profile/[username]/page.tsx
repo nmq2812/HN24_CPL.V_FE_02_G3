@@ -1,29 +1,57 @@
-// "use client";
-import { Avatar, Button, Card, Flex, Layout, List, Typography } from "antd";
-import Feed from "@/components/Feed/Feed";
-import { Content } from "antd/es/layout/layout";
-import { cookies } from "next/headers";
+"use client";
+import { Avatar, Button, Card, Layout } from "antd";
 import Link from "antd/es/typography/Link";
-import { getCurrentUser } from "@/actions/authAction";
 import { getProfile } from "@/actions/handleProfile";
+import { useAuth } from "@/contexts/auth";
+import { useEffect, useMemo, useState } from "react";
+import { handleFollow, handleUnfollow } from "@/actions/handleFollowing";
+import dynamic from "next/dynamic";
+
+const Feed = dynamic(() => import('@/components/Feed/Feed'), { ssr: false });
+const Content = dynamic(() => import('antd/es/layout/layout').then(mod => mod.Content), { ssr: false });
 
 export default async function ProfilePage({
     params,
 }: {
     params: { username: string };
 }) {
-    const username = params.username;
-    const res = await getProfile(username);
-    const profile = res.profile;
 
-    const cookieStore = cookies();
-    const token = cookieStore.get("token")?.value ?? "";
+    const username = params.username;
+    const [profile, setProfile] = useState<Profile>();
+    const [follow, setFollow] = useState(profile?.following);
+    // const [isLoading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchProfile() {
+            const data = await getProfile(username);
+            setProfile(data.profile);
+            // setLoading(false);
+        }
+        fetchProfile();
+    }, [username]);
+
+    const handleFollowChange = async () => {
+        if (follow) {
+            await handleUnfollow(profile?.username!!, token!!);
+        } else {
+            await handleFollow(profile?.username!!, token!!);
+        }
+        setFollow(!follow);
+    };
+
+    const { user } = useAuth();
+    const token = user?.token;
+
+    const isCurrentUser = useMemo(() => username === user?.username, [username, user]);
+
+    // if (isLoading) {
+    //     return <div>Loading...</div>;
+    // }
+
     const searchParams = {
         author: profile?.username,
     };
 
-    const userResponse = await getCurrentUser(token);
-    const user = userResponse.success ? userResponse.data : null;
     return (
         <div className="profile-page">
             <div className="user-info">
@@ -39,22 +67,21 @@ export default async function ProfilePage({
                                     />
                                     <h4>{profile?.username}</h4>
                                     <p>{profile?.bio}</p>
-                                    {
-                                        username === user?.username ? (
-                                            <a
-                                                className="btn btn-sm btn-outline-secondary action-btn"
-                                                href="/settings"
-                                            >
-                                                <i className="ion-gear-a" /> Edit Profile Settings
-                                            </a>
-                                        ) : (
-                                            <button
-                                                className="btn btn-sm btn-outline-primary"
-                                            // onClick={() => {handleFollowing }}
-                                            >
-                                                Follow
-                                            </button>
-                                        )
+                                    {isCurrentUser ? (
+                                        <a
+                                            className="btn btn-sm btn-outline-secondary action-btn"
+                                            href="/settings"
+                                        >
+                                            <i className="ion-gear-a" /> Edit Profile Settings
+                                        </a>
+                                    ) : (
+                                        <Button
+                                            type={follow ? "primary" : "default"}
+                                            onClick={handleFollowChange}
+                                        >
+                                            {follow ? "Follow" : "Unfollow"}
+                                        </Button>
+                                    )
                                     }
                                 </div>
                             </div>
@@ -66,15 +93,20 @@ export default async function ProfilePage({
                 className="col-12 col-md-10 col-xl-8"
                 style={{ minHeight: "100%", margin: "0 auto" }}
             >
-                {username === user?.username && (
-                    <Card hoverable style={{ margin: "0 24px" }}>
-                        <Avatar src={profile?.image} />
-                        <Link style={{ margin: '30px', flexGrow: 1, }}
-                            href={`/profile/${profile?.username}`} //sửa link tạo bài viết mới
-                            className="username"
+                {isCurrentUser && (
+                    <Card style={{ margin: "0 24px", borderColor: 'lightgray'}}>
+                        <Avatar size={45} src={profile?.image} style={{marginRight: '24px'}}/>
+                        <Button type="text" style={{
+                            padding: "24px 0",
+                            backgroundColor: 'lightgray',
+                            color: 'black',
+                            borderRadius: '24px',
+                            width: '88%',
+                        }}
+                        // onClick={createPost}
                         >
-                            What&#39;s on your mind, {profile?.username.split(' ')[0]}?
-                        </Link>
+                            What’s on your mind, {profile?.username}?
+                        </Button>
                     </Card>
                 )}
 
