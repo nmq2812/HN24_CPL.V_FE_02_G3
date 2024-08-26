@@ -1,13 +1,11 @@
-interface User {
-  email: string;
-  token: string;
+interface Profile {
+  email?: string;
+  token?: string;
   username: string;
   bio: string;
   image: string;
+  admin?: boolean;
   following?: boolean;
-}
-interface UserResponse {
-  user: User;
 }
 interface LoginCredentials {
   email: string;

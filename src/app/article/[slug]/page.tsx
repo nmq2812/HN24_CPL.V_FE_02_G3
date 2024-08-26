@@ -1,25 +1,30 @@
 "use client";
 
-import { getClickedArticle } from "@/actions/handleArticle";
+import { getSingleArticle } from "@/actions/handleArticle";
 import { handleLike, handleUnlike } from "@/actions/handleLike";
-import { getComment, deleteComment, postComent } from "@/actions/handleComments";
-import { LikeOutlined, LikeFilled, DeleteOutlined, SendOutlined, UserAddOutlined } from "@ant-design/icons";
+import {
+  getComment,
+  deleteComment,
+  postComent,
+} from "@/actions/handleComments";
+import {
+  LikeOutlined,
+  LikeFilled,
+  DeleteOutlined,
+  SendOutlined,
+  UserAddOutlined,
+} from "@ant-design/icons";
 import { Space, Avatar, Typography, Button, List, Input, Spin } from "antd";
-import { Comments } from "@/types/comments";
 
-import Meta from "antd/es/card/Meta";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { parseCookies } from "nookies";
 
 function Post({ params }: { params: { slug: string } }) {
-
   const { Title, Paragraph } = Typography;
   const slug = params.slug;
   const [article, setArticle] = useState<Article>();
   const [commentText, setCommentText] = useState("");
 
-  const [comments, setComments] = useState<Comments[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
 
   const [like, setLike] = useState(article?.favorited);
 
@@ -30,8 +35,8 @@ function Post({ params }: { params: { slug: string } }) {
     if (typeof slug === "string") {
       (async function () {
         const [result, fetchedComments] = await Promise.all([
-          getClickedArticle(slug, token!!),
-          getComment(slug)
+          getSingleArticle(slug, token!!),
+          getComment(slug),
         ]);
         setArticle(result.article);
         setLike(result.article.favorited);
@@ -70,7 +75,7 @@ function Post({ params }: { params: { slug: string } }) {
   const handleDeleteComment = async (commentId: string) => {
     try {
       await deleteComment(slug, commentId, token!!);
-      setComments(comments.filter(comment => comment.id !== commentId));
+      setComments(comments.filter((comment) => comment.id !== commentId));
     } catch (error) {
       console.error("Failed to delete comment:", error);
     }
@@ -84,7 +89,14 @@ function Post({ params }: { params: { slug: string } }) {
 
   if (!article) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
         <Spin size="large" />
       </div>
     );
@@ -128,7 +140,13 @@ function Post({ params }: { params: { slug: string } }) {
           dataSource={comments}
           renderItem={(comment) => (
             <li key={comment.id}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "16px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: "16px",
+                }}
+              >
                 <div style={{ display: "flex" }}>
                   <Avatar src={comment.author.image} />
                   <div style={{ marginLeft: "8px" }}>

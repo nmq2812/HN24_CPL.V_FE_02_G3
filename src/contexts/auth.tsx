@@ -14,9 +14,9 @@ import { jwtDecode } from "jwt-decode";
 import toast from "react-hot-toast";
 
 interface AuthContextType {
-  user: User | null;
+  user: Profile | null;
   loading: boolean;
-  login: (user: User) => void;
+  login: (user: Profile) => void;
   logout: () => void;
 }
 
@@ -25,7 +25,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const route = useRouter();
   const cookies = parseCookies();
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<Profile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -58,18 +58,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const login = (user: User) => {
-    const decodedToken = jwtDecode(user.token);
-    const currentTime = Math.floor(Date.now() / 1000);
-    setUser(user);
-    setCookie(null, "isAuthenticated", "true", {
-      maxAge: decodedToken.exp!! - currentTime,
-      path: "/",
-    });
-    setCookie(null, "token", user.token, {
-      maxAge: decodedToken.exp!! - currentTime,
-      path: "/",
-    });
+  const login = (user: Profile) => {
+    if (user.token) {
+      const decodedToken = jwtDecode(user.token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      setUser(user);
+      setCookie(null, "isAuthenticated", "true", {
+        maxAge: decodedToken.exp!! - currentTime,
+        path: "/",
+      });
+      setCookie(null, "token", user.token, {
+        maxAge: decodedToken.exp!! - currentTime,
+        path: "/",
+      });
+    }
   };
 
   const logout = () => {

@@ -27,19 +27,16 @@ const SettingsPage: React.FC = () => {
     if (email) userData.email = email;
 
     if (Object.keys(userData).length === 0) {
-      console.log("No changes to update.");
       return;
     }
     try {
       await putUser(userData, token!!);
-      console.log("Settings updated successfully");
       // Bạn có thể thêm thông báo thành công hoặc điều hướng về trang khác sau khi cập nhật thành công
     } catch (error) {
       console.error("Failed to update settings:", error);
       // Hiển thị thông báo lỗi nếu việc cập nhật không thành công
     }
 
-    console.log("Settings updated", { image, username, bio, email });
   };
 
   return (

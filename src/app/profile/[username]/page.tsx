@@ -18,7 +18,6 @@ export default function ProfilePage({
             setProfile(profile);
         })();
     }, []);
-    console.log(profile?.username);
 
 
     return (
