@@ -33,6 +33,7 @@ function Post({ params }: { params: { slug: string } }) {
   const token = user?.token;
   const currentUser = user?.username;
 
+<<<<<<< Updated upstream
   useEffect(() => {
     if (typeof slug === "string") {
       (async function () {
@@ -46,6 +47,77 @@ function Post({ params }: { params: { slug: string } }) {
       })();
     } else {
       console.error(typeof slug);
+=======
+    useEffect(() => {
+        if (typeof slug === "string") {
+            (async function () {
+                const [result, fetchedComments] = await Promise.all([
+                    getClickedArticle(slug, token!!),
+                    getComment(slug),
+                ]);
+                setArticle(result.article);
+                setLike(result.article.favorited);
+                setComments(fetchedComments);
+            })();
+        } else {
+            console.error(typeof slug);
+        }
+    }, [like, comments, user, article]);
+
+    const handleLikeButtonClick = async () => {
+        if (like) {
+            await handleUnlike(article?.slug!!, token!!);
+        } else {
+            await handleLike(article?.slug!!, token!!);
+        }
+        setLike(!like);
+    };
+
+    const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setCommentText(e.target.value);
+    };
+
+    const handleSendComment = async () => {
+        if (commentText.trim()) {
+            try {
+                const newComment = await postComent(slug, token!!, commentText);
+                setComments([...comments, newComment]);
+                setCommentText("");
+            } catch (error) {
+                console.error("Failed to post comment:", error);
+            }
+        }
+    };
+
+    const handleDeleteComment = async (commentId: string) => {
+        try {
+            await deleteComment(slug, commentId, token!!);
+            setComments(comments.filter((comment) => comment.id !== commentId));
+        } catch (error) {
+            console.error("Failed to delete comment:", error);
+        }
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            handleSendComment();
+        }
+    };
+
+    if (!article) {
+        return (
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    minHeight: "100vh",
+                }}
+            >
+                <Spin size="large" />
+            </div>
+        );
+>>>>>>> Stashed changes
     }
   }, [slug]);
 

@@ -1,6 +1,8 @@
+"use client";
 import Feed from "@/components/Feed/Feed";
 import { Col, Layout, Row } from "antd";
 import { Content } from "antd/es/layout/layout";
+<<<<<<< Updated upstream:src/app/favorites/page.tsx
 import { cookies } from "next/headers";
 import TagList from "@/components/tagList";
 import { getCurrentUser } from "@/actions/authAction";
@@ -36,6 +38,29 @@ async function FavoritesPage({
       </Content>
     </Layout>
   );
+=======
+import { useAuth } from "@/contexts/auth";
+
+function FavoritesPage({ params }: { params: { username: string } }) {
+    const { user } = useAuth();
+    const searchParams = {
+        favorited: params.username,
+    };
+    return (
+        <Layout
+            className="col-12 col-md-10 col-xl-8"
+            style={{ minHeight: "100%", margin: "0 auto" }}
+        >
+            <Content style={{ padding: "0 24px", marginTop: "16px" }}>
+                <Feed
+                    fetchUrl="/articles"
+                    optionals={searchParams}
+                    token={user?.token}
+                />
+            </Content>
+        </Layout>
+    );
+>>>>>>> Stashed changes:src/app/favorites/[username]/page.tsx
 }
 
 export default FavoritesPage;

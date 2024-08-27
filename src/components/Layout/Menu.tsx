@@ -17,6 +17,7 @@ export default function MyMenu({ onClose }: { onClose?: () => void }) {
   const { user, logout } = useAuth();
   const [selectedKey, setSelectedKey] = useState<string>("home");
   const MenuList = [
+<<<<<<< Updated upstream
     {
       key: "home",
       label: "Home",
@@ -60,6 +61,51 @@ export default function MyMenu({ onClose }: { onClose?: () => void }) {
       href: "/",
       onClick: logout,
     },
+=======
+      {
+          key: "home",
+          label: "Home",
+          icon: <HomeOutlined />,
+          requireAuth: false,
+          href: "/",
+      },
+      {
+          key: "follow",
+          label: "Following",
+          icon: <PlusCircleOutlined />,
+          requireAuth: true,
+          href: "/following",
+      },
+      {
+          key: "favorites",
+          label: "Favorites",
+          icon: <HeartOutlined />,
+          requireAuth: true,
+          href: `/favorites/${user?.username}`,
+      },
+      {
+          key: "profile",
+          label: "Profile",
+          icon: <UserOutlined />,
+          requireAuth: true,
+          href: `/profile/${user?.username}`,
+      },
+      {
+          key: "signIn",
+          label: "Sign In",
+          icon: <LoginOutlined />,
+          requireAuth: false,
+          href: "/login",
+      },
+      {
+          key: "signOut",
+          label: "Sign Out",
+          icon: <LoginOutlined />,
+          requireAuth: true,
+          href: "/",
+          onClick: logout,
+      },
+>>>>>>> Stashed changes
   ];
 
   const cookies = parseCookies();
