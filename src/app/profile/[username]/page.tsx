@@ -1,6 +1,5 @@
 "use client";
 import { Avatar, Button, Card, Layout } from "antd";
-import Link from "antd/es/typography/Link";
 import { getProfile } from "@/actions/handleProfile";
 import { useAuth } from "@/contexts/auth";
 import { useEffect, useMemo, useState } from "react";

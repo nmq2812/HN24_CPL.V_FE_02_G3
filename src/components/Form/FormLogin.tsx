@@ -12,6 +12,7 @@ const FormSignup = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { login } = useAuth();
   const handleLogin: FormProps<LoginCredentials>["onFinish"] = (values) => {
+    console.log(values);
     setLoading(true);
     loginAction(values).then((result) => {
       if (result.success) {

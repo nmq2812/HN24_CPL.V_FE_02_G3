@@ -1,3 +1,4 @@
+"use server";
 const NEXT_PUBLIC_BASE_BACKEND_URL =
   "https://node-express-conduit.appspot.com/api";
 
@@ -21,6 +22,7 @@ export const getArticles = async (
     const response = await fetch(url, {
       method: "GET",
       headers: { Authorization: token ? `Bearer ${token}` : "" },
+      next: { tags: ["list-articles"] },
     });
     const res = await response.json();
     const nextPage =
@@ -33,37 +35,55 @@ export const getArticles = async (
   }
 };
 
-export const getClickedArticle = async (slug: string, token?: string) => {
+export const getSingleArticle = async (slug: string, token?: string) => {
   try {
     const response = await fetch(
       `${NEXT_PUBLIC_BASE_BACKEND_URL}/articles/${slug}`,
       {
         method: "GET",
         headers: { Authorization: token ? `Bearer ${token}` : "" },
+        next: { tags: ["single-article"] },
       }
     );
 
     const res = await response.json();
     return res;
-  } catch {
-    const result: Article = {
-      slug: "error",
-      title: "error",
-      description: "error",
-      body: "error",
-      tagList: [],
-      createdAt: "",
-      updatedAt: "",
-      favorited: false,
-      favoritesCount: 0,
-      author: {
-        username: "error",
-        bio: "error",
-        image: "error",
-        admin: false,
-        following: false,
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const postArticle = async (
+  article: ArticleCredentials,
+  token: string
+) => {
+  try {
+    const response = await fetch(`${NEXT_PUBLIC_BASE_BACKEND_URL}/articles`, {
+      method: "POST",
+      body: JSON.stringify({ article }),
+      headers: {
+        Authorization: token ? `Bearer ${token}` : "",
+        "Content-Type": "application/json",
       },
+    });
+
+    const res = await response.json();
+    if (response.status === 200) {
+      return { success: true, data: res.article };
+    } else {
+      if (response.status === 401 || response.status === 422) {
+        return { success: false, message: res };
+      } else {
+        return {
+          success: false,
+          message: { errors: { message: "Unexpected error" } },
+        };
+      }
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: { errors: { message: "An error occurred" } },
     };
-    return result;
   }
 };
