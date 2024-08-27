@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { getCurrentUser } from "@/actions/authAction";
 import { jwtDecode } from "jwt-decode";
 import toast from "react-hot-toast";
-import { getProfile } from "@/actions/profile";
+import { getProfile } from "@/actions/handleProfile";
 
 interface AuthContextType {
   user: Profile | null;
@@ -44,7 +44,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             };
 
             login(combine);
-            console.log("Kết hợp dữ liệu user và profile:", combine);
           } else {
             setUser(null);
             destroyCookie(null, "isAuthenticated");
@@ -89,6 +88,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     destroyCookie(null, "isAuthenticated");
     destroyCookie(null, "token");
+    destroyCookie(null, "username");
     toast.success("Sign out successfully");
     route.push("/");
   };

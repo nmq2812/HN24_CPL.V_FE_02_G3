@@ -17,9 +17,11 @@ import {
 import { Space, Avatar, Typography, Button, List, Input, Spin } from "antd";
 
 import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/auth";
 
 function Post({ params }: { params: { slug: string } }) {
   const { Title, Paragraph } = Typography;
+  const { user } = useAuth();
   const slug = params.slug;
   const [article, setArticle] = useState<Article>();
   const [commentText, setCommentText] = useState("");
@@ -28,8 +30,8 @@ function Post({ params }: { params: { slug: string } }) {
 
   const [like, setLike] = useState(article?.favorited);
 
-  const token = localStorage.getItem("token");
-  const currentUser = "luandeptrai"; //Lấy username từ cookie.
+  const token = user?.token;
+  const currentUser = user?.username;
 
   useEffect(() => {
     if (typeof slug === "string") {

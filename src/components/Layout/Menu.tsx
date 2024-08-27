@@ -43,18 +43,11 @@ export default function MyMenu({ onClose }: { onClose?: () => void }) {
       label: "Profile",
       icon: <UserOutlined />,
       requireAuth: true,
-      href: "/profile",
-    },
-    {
-      key: "settings",
-      label: "Settings",
-      icon: <SettingOutlined />,
-      requireAuth: false,
-      href: "/",
+      href: `/profile/${user?.username}`,
     },
     {
       key: "signIn",
-      label: "Sign In",
+      label: "Sign In/Sign Up",
       icon: <LoginOutlined />,
       requireAuth: false,
       href: "/login",
@@ -69,26 +62,11 @@ export default function MyMenu({ onClose }: { onClose?: () => void }) {
     },
   ];
 
-  const name = user?.username;
   const cookies = parseCookies();
   const pathname = usePathname();
   const isAuthenticated = cookies.isAuthenticated === "true";
 
   const addLinkList = MenuList.map((item) => {
-    if (item.key === "profile") {
-      return {
-        ...item,
-        href: `/profile/${name}`,
-        label: (
-          <Link
-            className="nav-link"
-            href={isAuthenticated ? `/profile/${name}` : "/"}
-          >
-            Profile
-          </Link>
-        ),
-      };
-    }
     return {
       ...item,
       label: (
@@ -113,7 +91,7 @@ export default function MyMenu({ onClose }: { onClose?: () => void }) {
   useEffect(() => {
     const matchingMenu = filterItem.find((item) => pathname === item.href);
     setSelectedKey(matchingMenu ? matchingMenu.key : "");
-  }, [isAuthenticated, pathname]);
+  }, [isAuthenticated, pathname, user?.username]);
 
   return (
     <Menu

@@ -1,24 +1,29 @@
 "use client";
 import Link from "next/link";
 import { formatDate } from "@/ultis/formatTime";
-import { Avatar, Dropdown, MenuProps, Typography } from "antd";
-import { EditOutlined, UserAddOutlined } from "@ant-design/icons";
+import { Avatar, Dropdown, MenuProps } from "antd";
+import {
+  EditOutlined,
+  ProfileOutlined,
+  UserAddOutlined,
+} from "@ant-design/icons";
 import { followUser, unfollowUser } from "@/actions/handleFollow";
 import { useAuth } from "@/contexts/auth";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { TruncateText } from "@/ultis/TruncateText";
 
 export default function CardPostHeader({
   author,
   updatedAt,
   isMe,
+  slug,
 }: {
   author: Profile;
   updatedAt: string;
   isMe: boolean;
+  slug: string;
 }) {
   const { user } = useAuth();
-  const { Text } = Typography;
   const [follow, setFollow] = useState(author.following);
 
   const handleFollow = () => {
@@ -31,6 +36,15 @@ export default function CardPostHeader({
   };
 
   const items: MenuProps["items"] = [
+    {
+      key: "detail",
+      label: (
+        <Link href={`/article/${slug}`}>
+          {" "}
+          <ProfileOutlined /> Xem chi tiết
+        </Link>
+      ),
+    },
     {
       key: "follow",
       label: (

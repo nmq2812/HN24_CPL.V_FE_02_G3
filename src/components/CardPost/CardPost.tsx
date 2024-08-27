@@ -12,13 +12,13 @@ export default function CardPost({
   article: Article;
   currentUser?: Profile;
 }) {
-
   const isMe =
     currentUser!! && currentUser.username === article.author.username;
   return (
     <>
       <Card>
         <CardPostHeader
+          slug={article.slug}
           author={article.author}
           updatedAt={article.updatedAt}
           isMe={isMe}
