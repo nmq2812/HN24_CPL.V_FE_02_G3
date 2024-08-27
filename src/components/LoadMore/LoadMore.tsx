@@ -23,7 +23,6 @@ export default function LoadMore({
   useEffect(() => {
     if (inView) {
       if (page === null) return;
-      console.log("Loading use effect...");
       getArticles(
         fetchUrl,
         {
@@ -34,14 +33,12 @@ export default function LoadMore({
         token
       )
         .then((res) => {
-          console.log(res);
           setData([...data, ...res.data]);
           setPage(res.nextPage ? page + 1 : null);
         })
         .catch(() => setPage(null));
     }
   }, [inView, data, page]);
-  console.log("carrdascasf");
   return (
     <>
       <Space direction="vertical" size="large" style={{ width: "100%" }}>

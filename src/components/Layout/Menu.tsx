@@ -25,11 +25,11 @@ export default function MyMenu({ onClose }: { onClose?: () => void }) {
       href: "/",
     },
     {
-      key: "follow",
-      label: "Following",
+      key: "create",
+      label: "New Article",
       icon: <PlusCircleOutlined />,
       requireAuth: true,
-      href: "/following",
+      href: "/editor",
     },
     {
       key: "favorites",

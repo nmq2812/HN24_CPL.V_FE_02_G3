@@ -15,7 +15,6 @@ export const followUser = async (username: string, token?: string) => {
         },
       }
     );
-    console.log("follow");
     revalidateTag("list-articles");
     const res = await response.json();
     if (response.status === 200) {
@@ -42,7 +41,6 @@ export const unfollowUser = async (username: string, token?: string) => {
         },
       }
     );
-    console.log("UNfollow");
     revalidateTag("list-articles");
     const res = await response.json();
     if (response.status === 200) {

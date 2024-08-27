@@ -6,6 +6,7 @@ import { Content } from "antd/es/layout/layout";
 import TagList from "@/components/tagList";
 import { cookies } from "next/headers";
 import { getCurrentUser } from "@/actions/authAction";
+import NewPost from "@/components/NewPost";
 
 export default async function Home({
   searchParams,

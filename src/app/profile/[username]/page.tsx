@@ -1,5 +1,5 @@
 "use client";
-import { getProfile } from "@/apis/profile";
+import { getProfile } from "@/actions/profile";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { List } from "antd";

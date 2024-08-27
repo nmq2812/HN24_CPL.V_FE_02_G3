@@ -2,6 +2,10 @@ import { DeleteOutlined, SendOutlined } from "@ant-design/icons";
 import { Avatar, Button, Input, List } from "antd";
 import { CommentType } from "@/types/enums";
 import { formatDate } from "@/ultis/formatTime";
+import { formatText } from "@/ultis/textToHTML";
+import Paragraph from "antd/es/typography/Paragraph";
+import { TruncateText } from "@/ultis/TruncateText";
+import Link from "next/link";
 
 export default function CardPostComment({
   comments,
@@ -28,19 +32,37 @@ export default function CardPostComment({
               }}
             >
               <div className="d-flex">
-                <Avatar src={comment.author.image} />
+                <div className="flex-grow-1">
+                  <Link href={`/profile/${comment.author.username}`}>
+                    <Avatar src={comment.author.image} />
+                  </Link>
+                </div>
+
                 <div
                   className="ms-2 rounded p-2"
                   style={{ backgroundColor: "#f0f0f0" }}
                 >
-                  <strong>{comment.author.username}</strong>
+                  <Link href={`/profile/${comment.author.username}`}>
+                    <TruncateText
+                      text={comment.author.username}
+                      maxLength={10}
+                    />
+                  </Link>
+
                   <div
                     className="date fw-lighter text-muted"
                     style={{ fontSize: "0.6rem" }}
                   >
                     {formatDate(comment.createdAt)}
                   </div>
-                  <p className="m-0 fs-5">{comment.body}</p>
+                  <Paragraph
+                    ellipsis={{
+                      expandable: true,
+                      symbol: "Read more",
+                    }}
+                  >
+                    {formatText(comment.body)}
+                  </Paragraph>
                 </div>
               </div>
               {/* {comment.author.username === currentUser && (

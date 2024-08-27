@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { getCurrentUser } from "@/actions/authAction";
 import { jwtDecode } from "jwt-decode";
 import toast from "react-hot-toast";
+import { getProfile } from "@/actions/profile";
 
 interface AuthContextType {
   user: Profile | null;
@@ -24,7 +25,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const route = useRouter();
-  const cookies = parseCookies();
   const [user, setUser] = useState<Profile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -33,15 +33,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const cookies = parseCookies();
       const token = cookies.token;
       if (cookies.isAuthenticated === "true" && token && !isExpired(token)) {
-        await getCurrentUser(token).then((result) => {
-          if (result.success) {
-            login(result.data);
+        try {
+          const userResult = await getCurrentUser(token);
+          if (userResult.success) {
+            const username = userResult.data.username;
+            const profileResult = await getProfile(username);
+            const combine = {
+              ...userResult.data,
+              ...profileResult.profile,
+            };
+
+            login(combine);
+            console.log("Kết hợp dữ liệu user và profile:", combine);
           } else {
             setUser(null);
             destroyCookie(null, "isAuthenticated");
             destroyCookie(null, "token");
           }
-        });
+        } catch (error) {
+          console.error("Lỗi trong quá trình lấy dữ liệu:", error);
+        }
       }
       setLoading(false);
     })();
@@ -58,16 +69,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const login = (user: Profile) => {
-    if (user.token) {
-      const decodedToken = jwtDecode(user.token);
+  const login = (newuser: Profile) => {
+    if (newuser.token) {
+      const decodedToken = jwtDecode(newuser.token);
       const currentTime = Math.floor(Date.now() / 1000);
-      setUser(user);
+      setUser({ ...user, ...newuser });
       setCookie(null, "isAuthenticated", "true", {
         maxAge: decodedToken.exp!! - currentTime,
         path: "/",
       });
-      setCookie(null, "token", user.token, {
+      setCookie(null, "token", newuser.token, {
         maxAge: decodedToken.exp!! - currentTime,
         path: "/",
       });
