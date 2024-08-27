@@ -1,16 +1,11 @@
 "use client";
-<<<<<<< Updated upstream
-import { Avatar, Button, Card, Layout } from "antd";
-=======
+
 import { Avatar, Button, Card, Col, Layout, Row } from "antd";
-import Link from "antd/es/typography/Link";
->>>>>>> Stashed changes
 import { getProfile } from "@/actions/handleProfile";
 import { useAuth } from "@/contexts/auth";
 import { useEffect, useMemo, useState } from "react";
 import { handleFollow, handleUnfollow } from "@/actions/handleFollowing";
 import dynamic from "next/dynamic";
-import Column from "antd/es/table/Column";
 
 const Feed = dynamic(() => import("@/components/Feed/Feed"), { ssr: false });
 const Content = dynamic(
