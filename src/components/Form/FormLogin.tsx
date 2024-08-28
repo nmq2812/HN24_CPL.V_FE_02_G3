@@ -12,13 +12,12 @@ const FormSignup = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { login } = useAuth();
   const handleLogin: FormProps<LoginCredentials>["onFinish"] = (values) => {
-    console.log(values);
     setLoading(true);
     loginAction(values).then((result) => {
       if (result.success) {
         login(result.data);
         toast.success("Sign In successfully");
-        router.replace("/");
+        router.back();
       } else {
         const errors = result.message.errors;
         for (const key in errors) {

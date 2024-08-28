@@ -1,3 +1,4 @@
+"use client";
 import { getComment } from "@/actions/handleComments";
 import { handleZero, suffixS } from "@/ultis/formatText";
 import { CommentOutlined, HeartFilled, HeartOutlined } from "@ant-design/icons";
@@ -7,38 +8,32 @@ import CardPostComment from "../CardPostComment";
 import { useAuth } from "@/contexts/auth";
 import { handleLike, handleUnlike } from "@/actions/handleLike";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function CardPostFooter({
   article,
   commentType,
+  commentsSize,
 }: {
   article: Article;
   commentType: CommentType;
+  commentsSize: number;
 }) {
   const { user } = useAuth();
   const router = useRouter();
-  const [like, setLike] = useState<boolean>(article.favorited);
-  const [likeCount, setLikeCount] = useState<number>(article.favoritesCount);
-  const [commentCount, setCommentCount] = useState<number>(0);
-  const [comments, setComments] = useState([]);
-  useEffect(() => {
-    (async () => {
-      await getComment(article.slug).then((res) => {
-        setComments(res);
-        setCommentCount(res.length);
-      });
-    })();
-  }, []);
+  const isDetail = commentType === CommentType.DetailComment;
 
   const handleOnclickLike = () => {
-    if (!like) {
-      handleLike(article.slug, user?.token!!);
-      setLikeCount(likeCount + 1);
+    if (user?.token) {
+      if (!article.favorited) {
+        handleLike(article.slug, user?.token!!);
+      } else {
+        handleUnlike(article.slug, user?.token!!);
+      }
     } else {
-      handleUnlike(article.slug, user?.token!!);
-      setLikeCount(likeCount - 1);
+      toast.error("You need to login to do more");
+      router.push("/login");
     }
-    setLike(!like);
   };
 
   return (
@@ -46,38 +41,37 @@ export default function CardPostFooter({
       <div className="d-flex text-center border-top border-bottom align-items-center">
         <div className="flex-grow-1">
           <div className="btn" onClick={handleOnclickLike}>
-            {like ? (
+            {article.favoritesCount ? (
               <HeartFilled style={{ color: "red" }} />
             ) : (
               <HeartOutlined />
             )}
             <span>
               {" "}
-              {handleZero(likeCount)} {suffixS("Like", likeCount)}
+              {handleZero(article.favoritesCount)}{" "}
+              {suffixS("Like", article.favoritesCount)}
             </span>
           </div>
         </div>
         <div className="flex-grow-1">
           <div
             className="btn"
-            onClick={() => {
-              router.push(`/article/${article.slug}`);
-            }}
+            onClick={
+              isDetail
+                ? () => {}
+                : () => {
+                    router.push(`/article/${article.slug}`);
+                  }
+            }
           >
             <CommentOutlined />
             <span>
               {" "}
-              {handleZero(comments.length)} {suffixS("Comment", commentCount)}
+              {handleZero(commentsSize)} {suffixS("Comment", commentsSize)}
             </span>
           </div>
         </div>
       </div>
-      {comments.length ? (
-        <CardPostComment
-          comments={comments}
-          commentType={commentType}
-        ></CardPostComment>
-      ) : null}
     </>
   );
 }

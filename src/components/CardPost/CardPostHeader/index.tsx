@@ -3,96 +3,96 @@ import Link from "next/link";
 import { formatDate } from "@/ultis/formatTime";
 import { Avatar, Dropdown, MenuProps } from "antd";
 import {
-    DeleteOutlined,
-    EditOutlined,
-    ProfileOutlined,
-    UserAddOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  ProfileOutlined,
+  UserAddOutlined,
 } from "@ant-design/icons";
 import { followUser, unfollowUser } from "@/actions/handleFollow";
 import { useAuth } from "@/contexts/auth";
 import { useState } from "react";
 import { TruncateText } from "@/ultis/TruncateText";
-import { deleteArticle } from "@/actions/handleArticle";
+import { CommentType } from "@/types/enums";
 
 export default function CardPostHeader({
-    author,
-    updatedAt,
-    isMe,
-    slug,
+  author,
+  updatedAt,
+  slug,
+  commentType,
 }: {
-    author: Profile;
-    updatedAt: string;
-    isMe: boolean;
-    slug: string;
+  author: Profile;
+  updatedAt: string;
+  slug: string;
+  commentType: CommentType;
 }) {
-    const { user } = useAuth();
-    const [follow, setFollow] = useState(author.following);
+  const { user } = useAuth();
+  const [follow, setFollow] = useState(author.following);
+  const isMe = user!! && user.username === author.username;
+  const isDetail = commentType === CommentType.DetailComment;
 
-    const handleFollow = () => {
-        if (follow) {
-            unfollowUser(author.username, user?.token);
-        } else {
-            followUser(author.username, user?.token);
-        }
-        setFollow(!follow);
-    };
-
-    const handleDelete = () => {
-        console.log(deleteArticle(slug, user?.token!!));
-    };
-
-    const items: MenuProps["items"] = [
-        {
-            key: "detail",
-            label: (
-                <Link href={`/article/${slug}`}>
-                    {" "}
-                    <ProfileOutlined /> Xem chi tiết
-                </Link>
-            ),
-        },
-        {
-            key: "follow",
-            label: (
-                <div onClick={handleFollow}>
-                    {" "}
-                    <UserAddOutlined /> {follow ? "Followed" : "Follow"}
-                </div>
-            ),
-        },
-    ];
-
-    if (isMe) {
-        items.pop();
-        items.push(
-            {
-                key: "edit",
-                label: (
-                    <div>
-                        <EditOutlined /> Edit
-                    </div>
-                ),
-            },
-            {
-                key: "delete",
-                label: (
-                    <div onClick={handleDelete}>
-                        <DeleteOutlined /> Delete
-                    </div>
-                ),
-            }
-        );
+  const handleFollow = () => {
+    if (follow) {
+      unfollowUser(author.username, user?.token);
+    } else {
+      followUser(author.username, user?.token);
     }
-    return (
-        <div className="d-flex align-items-center mb-2">
-            <div className="flex-grow-1 d-flex align-items-center ">
-                <Link href={`/profile/${author.username}`}>
-                    <Avatar size={40} src={author.image} />
-                </Link>
-                <div className="ms-2 rounded p-2">
-                    <Link href={`/profile/${author.username}`}>
-                        <TruncateText text={author.username} maxLength={10} />
-                    </Link>
+    setFollow(!follow);
+  };
+
+  const items: MenuProps["items"] = [
+    {
+      key: "detail",
+      label: (
+        <Link href={`/article/${slug}`}>
+          {" "}
+          <ProfileOutlined /> Detail
+        </Link>
+      ),
+    },
+    {
+      key: "follow",
+      label: (
+        <div onClick={handleFollow}>
+          {" "}
+          <UserAddOutlined /> {follow ? "Followed" : "Follow"}
+        </div>
+      ),
+    },
+  ];
+
+  if (isDetail) {
+    items.shift();
+  }
+
+  if (isMe) {
+    items.pop();
+    items.push({
+      key: "edit",
+      label: (
+        <Link href={`/editor/${slug}`}>
+          <EditOutlined /> Edit
+        </Link>
+      ),
+    });
+    items.push({
+      key: "delete",
+      label: (
+        <div>
+          <DeleteOutlined /> Delete
+        </div>
+      ),
+    });
+  }
+  return (
+    <div className="d-flex align-items-center mb-2">
+      <div className="flex-grow-1 d-flex align-items-center ">
+        <Link href={`/profile/${author.username}`}>
+          <Avatar size={40} src={author.image} />
+        </Link>
+        <div className="ms-2 rounded p-2">
+          <Link href={`/profile/${author.username}`}>
+            <TruncateText text={author.username} maxLength={10} />
+          </Link>
 
                     <div
                         className="date fw-lighter text-muted"
