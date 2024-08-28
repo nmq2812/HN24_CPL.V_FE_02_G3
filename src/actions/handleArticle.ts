@@ -94,21 +94,17 @@ export const postArticle = async (
 
 export const deleteArticle = async (slug: string, token: string) => {
     try {
-        const response = await fetch(
-            `${NEXT_PUBLIC_BASE_BACKEND_URL}/articles`,
-            {
-                method: "DELETE",
-                headers: {
-                    Authorization: token ? `Bearer ${token}` : "",
-                    "Content-Type": "application/json",
-                },
-            }
-        );
-        const res = await response.json();
+        await fetch(`${NEXT_PUBLIC_BASE_BACKEND_URL}/articles/${slug}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return "success";
     } catch (error) {
         return {
             success: false,
-            message: { errors: { message: "An error occurred" } },
+            message: { errors: { message: `${error}` } },
         };
     }
 };

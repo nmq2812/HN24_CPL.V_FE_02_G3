@@ -38,7 +38,7 @@ export default function CardPostHeader({
     };
 
     const handleDelete = () => {
-        deleteArticle(slug, user?.token!!);
+        console.log(deleteArticle(slug, user?.token!!));
     };
 
     const items: MenuProps["items"] = [
