@@ -1,33 +1,46 @@
-"use client";
 import { Card } from "antd";
 import CardPostHeader from "./CardPostHeader";
 import CardPostContent from "./CardPostContent";
 import CardPostFooter from "./CardPostFooter";
 import { CommentType } from "@/types/enums";
+import CardPostComment from "./CardPostComment";
+import { getComment } from "@/actions/handleComments";
 
-export default function CardPost({
+export default async function CardPost({
   article,
-  currentUser,
+  token,
+  commentType,
 }: {
   article: Article;
-  currentUser?: Profile;
+  token?: string;
+  commentType: CommentType;
 }) {
-  const isMe =
-    currentUser!! && currentUser.username === article.author.username;
+  const comments = await getComment(article.slug);
+
   return (
     <>
       <Card>
         <CardPostHeader
           slug={article.slug}
           author={article.author}
+          commentType={commentType}
           updatedAt={article.updatedAt}
-          isMe={isMe}
         ></CardPostHeader>
-        <CardPostContent article={article}></CardPostContent>
+        <CardPostContent
+          commentType={commentType}
+          article={article}
+        ></CardPostContent>
         <CardPostFooter
           article={article}
-          commentType={CommentType.FeedComment}
+          commentType={commentType}
+          commentsSize={comments.length}
         ></CardPostFooter>
+        <CardPostComment
+          comments={comments}
+          commentType={commentType}
+          slug={article.slug}
+          token={token}
+        ></CardPostComment>
       </Card>
     </>
   );

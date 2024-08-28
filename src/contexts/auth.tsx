@@ -15,7 +15,7 @@ import toast from "react-hot-toast";
 import { getProfile } from "@/actions/handleProfile";
 
 interface AuthContextType {
-  user: Profile | null;
+  user: Profile | undefined;
   loading: boolean;
   login: (user: Profile) => void;
   logout: () => void;
@@ -25,7 +25,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const route = useRouter();
-  const [user, setUser] = useState<Profile | null>(null);
+  const [user, setUser] = useState<Profile | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -35,6 +35,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (cookies.isAuthenticated === "true" && token && !isExpired(token)) {
         try {
           const userResult = await getCurrentUser(token);
+          console.log("hello cập nhật");
           if (userResult.success) {
             const username = userResult.data.username;
             const profileResult = await getProfile(username);
@@ -45,7 +46,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
             login(combine);
           } else {
-            setUser(null);
+            setUser(undefined);
             destroyCookie(null, "isAuthenticated");
             destroyCookie(null, "token");
           }
@@ -85,7 +86,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => {
-    setUser(null);
+    console.log("hello logout");
+    setUser(undefined);
     destroyCookie(null, "isAuthenticated");
     destroyCookie(null, "token");
     destroyCookie(null, "username");

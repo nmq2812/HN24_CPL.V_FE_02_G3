@@ -1,17 +1,12 @@
-"use server";
-import "./page.module.css";
-import "antd/dist/reset.css";
-import { Col, Layout, Row } from "antd";
 import Feed from "@/components/Feed/Feed";
+import { Col, Layout, Row } from "antd";
 import { Content } from "antd/es/layout/layout";
-import TagList from "@/components/Tag/tagList";
 import { cookies } from "next/headers";
-
+import TagList from "@/components/Tag/tagList";
 import { getCurrentUser } from "@/actions/authAction";
 import { getTags } from "@/actions/handleTags";
-import { CommentType } from "@/types/enums";
 
-export default async function Home({
+async function FavoritesPage({
   searchParams,
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
@@ -21,6 +16,10 @@ export default async function Home({
   const user = token && (await getCurrentUser(token)).data;
   const tags = await getTags();
 
+  searchParams = {
+    ...searchParams,
+    favorited: user.username,
+  };
   return (
     <Layout
       className="col-12 col-lg-10 col-xl-8"
@@ -34,14 +33,15 @@ export default async function Home({
               optionals={searchParams}
               token={token}
               currentUser={user}
-              commentType={CommentType.FeedComment}
             />
           </Col>
           <Col className="tags order-first order-lg-0" xs={24} lg={8}>
-            <TagList searchParams={searchParams} tags={tags} />
+            <TagList tags={tags} />
           </Col>
         </Row>
       </Content>
     </Layout>
   );
 }
+
+export default FavoritesPage;
