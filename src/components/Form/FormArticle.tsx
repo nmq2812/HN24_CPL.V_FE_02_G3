@@ -1,8 +1,6 @@
 "use client";
 import { Button, FormProps, Input, Form, Tag } from "antd";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/auth";
 import {
   getSingleArticle,
   postArticle,
@@ -11,10 +9,15 @@ import {
 import { capitalizeFirstLetter } from "@/ultis/formatText";
 import toast from "react-hot-toast";
 import { PlusOutlined } from "@ant-design/icons";
+import { parseCookies } from "nookies";
+import { useRouter } from "next/navigation";
 
 const UpdateOrAddArticle = ({ slug }: { slug?: string }) => {
+
+
   const router = useRouter();
-  const { user } = useAuth();
+  const cookies = parseCookies();
+  const token = cookies.token;
   const [form] = Form.useForm();
   const [tags, setTags] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
@@ -23,15 +26,15 @@ const UpdateOrAddArticle = ({ slug }: { slug?: string }) => {
   useEffect(() => {
     (async () => {
       if (slug) {
-        console.log(slug);
+
         try {
-          const res = await getSingleArticle(slug, user?.token!!);
+          const res = await getSingleArticle(slug, token);
           if (res) {
             form.setFieldsValue({
               title: res.data.title,
               description: res.data.description,
               body: res.data.body,
-              tagList: res.data.tagList || [],
+              ...(slug ? {} : { tagList: res.data.tagList || [] }),
             });
             setTags(res.data.tagList || []);
           }
@@ -40,20 +43,23 @@ const UpdateOrAddArticle = ({ slug }: { slug?: string }) => {
         }
       }
     })();
-  }, [slug, user?.token, form]);
+  }, [slug, token, form]);
 
   const saveArticle = async (values: ArticleCredentials) => {
     if (slug) {
-      return await putArticle(values, slug, user?.token!!);
+      return await putArticle(values, slug, token!!);
     } else {
-      return await postArticle(values, user?.token!!);
+      return await postArticle(values, token!!);
     }
   };
 
   const handleFinish: FormProps<ArticleCredentials>["onFinish"] = async (
     values
   ) => {
-    values.tagList = tags;
+    if (!slug) {
+      values.tagList = tags;
+    }
+
     setLoading(true);
     try {
       const result = await saveArticle(values);
@@ -133,16 +139,21 @@ const UpdateOrAddArticle = ({ slug }: { slug?: string }) => {
             onChange={(e) => setInputValue(e.target.value)}
             onPressEnter={handleInputTag}
             suffix={<PlusOutlined />}
+            disabled={slug ? true : false}
           />
           <div className="mt-1 border rounded bg-white p-2">
             {tags.length > 0 ? (
               tags.map((tag) => (
-                <Tag key={tag} closable onClose={() => handleClose(tag)}>
+                <Tag
+                  key={tag}
+                  closable={slug ? false : true}
+                  onClose={() => handleClose(tag)}
+                >
                   {tag}
                 </Tag>
               ))
             ) : (
-              <div className="fw-lighter text-muted">Selected tags</div>
+              <div className="fw-lighter text-muted">Chosen tags</div>
             )}
           </div>
         </div>

@@ -2,7 +2,7 @@ import Feed from "@/components/Feed/Feed";
 import { Col, Layout, Row } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { cookies } from "next/headers";
-import TagList from "@/components/Tag/tagList";
+import TagList from "@/components/Tag/TagList";
 import { getCurrentUser } from "@/actions/authAction";
 import { getTags } from "@/actions/handleTags";
 

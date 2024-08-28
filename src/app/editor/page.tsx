@@ -1,8 +1,6 @@
 import FormNewArticle from "@/components/Form/FormArticle";
 
-const NewArticle = ({ params }: { params: { slug: string } }) => {
-  const slug = params.slug;
-
+const NewArticle = () => {
   return (
     <div className="editor-page">
       <div className="container page">

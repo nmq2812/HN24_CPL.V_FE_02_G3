@@ -66,7 +66,7 @@ const FormSignup = () => {
 
       <Form.Item style={{ float: "right" }}>
         <Button type="primary" htmlType="submit" loading={loading}>
-          Sign In
+          Sign in
         </Button>
       </Form.Item>
     </Form>

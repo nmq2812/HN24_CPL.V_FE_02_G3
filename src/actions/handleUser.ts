@@ -6,10 +6,7 @@ interface UserData {
   image?: string;
 }
 
-export async function putUser(
-  userData: UserData,
-  token: string
-): Promise<void> {
+export async function putUser(userData: UserData, token: string) {
   try {
     if (!token) {
       throw new Error("User is not authenticated");
@@ -29,12 +26,23 @@ export async function putUser(
       }
     );
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to update user settings");
+    const res = await response.json();
+    if (response.status === 200) {
+      return { success: true, data: res.user };
+    } else {
+      if (response.status === 401 || response.status === 422) {
+        return { success: false, message: res };
+      } else {
+        return {
+          success: false,
+          message: { errors: { message: "Unexpected error" } },
+        };
+      }
     }
   } catch (error) {
-    console.error("Error updating user settings:", error);
-    throw error;
+    return {
+      success: false,
+      message: { errors: { message: "An error occurred" } },
+    };
   }
 }

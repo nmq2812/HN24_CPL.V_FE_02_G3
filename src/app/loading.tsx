@@ -5,13 +5,11 @@ import { Content } from "antd/es/layout/layout";
 import React, { ReactNode } from "react";
 export default function Loading() {
   const cards: ReactNode = Array.from(
-    { length: Number(process.env.NEXT_PUBLIC_NEXT_PUBLIC_LIMIT_ARTICLE) },
+    { length: Number(process.env.NEXT_PUBLIC_LIMIT_ARTICLE) },
     (_, index) => (
       <Card key={index} loading={true}>
         <Card.Meta
-          avatar={
-            <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
-          }
+          avatar={<Avatar src="" />}
           title={`Card title ${index + 1}`}
           description={
             <>
@@ -24,7 +22,10 @@ export default function Loading() {
     )
   );
   return (
-    <Layout style={{ minHeight: "100vh", maxWidth: "80%", margin: "0 auto" }}>
+    <Layout
+      className="col-12 col-lg-10 col-xl-8"
+      style={{ minHeight: "100%", margin: "0 auto" }}
+    >
       <Content style={{ padding: "0 24px", marginTop: "16px" }}>
         <Row gutter={24} align="top">
           <Col xs={24} md={18} lg={16}>
@@ -33,7 +34,6 @@ export default function Loading() {
             </Space>
           </Col>
 
-          {/* Bên phải: Danh sách thẻ tag */}
           <Col
             xs={24}
             md={6}

@@ -10,7 +10,7 @@ async function Post({ params }: { params: { slug: string } }) {
   const cookieStore = cookies();
   const token = cookieStore.get("token")?.value;
   const res = await getSingleArticle(slug, token);
-  console.log(res);
+
   if (!res.success) {
     redirect("/");
   }

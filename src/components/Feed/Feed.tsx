@@ -2,7 +2,7 @@ import { getArticles } from "@/actions/handleArticle";
 import CardPost from "../CardPost/CardPost";
 import { Space } from "antd";
 import { CommentType } from "@/types/enums";
-import PaginationArticle from "../Pagination";
+import PaginationArticle from "@/components/Pagination/PaginationArticle";
 
 export default async function Feed({
   fetchUrl,
@@ -36,14 +36,13 @@ export default async function Feed({
         />
       ))}
       <div className="me-3 text-center">
-        {res.nextPage ? (
+        {res.nextPage ? null : "Đã hết bài viết "}
+        <div className="my-3 mb-5">
           <PaginationArticle
             total={res.data.articlesCount}
             currentPage={res.data.page}
           />
-        ) : (
-          "Đã hết bài viết "
-        )}
+        </div>
       </div>
     </Space>
   );

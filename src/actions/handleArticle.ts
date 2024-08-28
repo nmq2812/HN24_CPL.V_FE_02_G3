@@ -40,7 +40,6 @@ export const getArticles = async (
 };
 
 export const getSingleArticle = async (slug: string, token?: string) => {
-  console.log("lại nào");
   try {
     const response = await fetch(
       `${NEXT_PUBLIC_BASE_BACKEND_URL}/articles/${slug}`,
@@ -147,12 +146,12 @@ export const putArticle = async (
 ) => {
   try {
     const response = await fetch(
-      `${NEXT_PUBLIC_BASE_BACKEND_URL}/articles${slug}`,
+      `${NEXT_PUBLIC_BASE_BACKEND_URL}/articles/${slug}`,
       {
-        method: "POST",
-        body: JSON.stringify({ article }),
+        method: "PUT",
+        body: JSON.stringify({ article: { ...article } }),
         headers: {
-          Authorization: token ? `Bearer ${token}` : "",
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }

@@ -4,7 +4,7 @@ import "antd/dist/reset.css";
 import { Col, Layout, Row } from "antd";
 import Feed from "@/components/Feed/Feed";
 import { Content } from "antd/es/layout/layout";
-import TagList from "@/components/Tag/tagList";
+import TagList from "@/components/Tag/TagList";
 import { cookies } from "next/headers";
 
 import { getCurrentUser } from "@/actions/authAction";
@@ -18,7 +18,6 @@ export default async function Home({
 }) {
   const cookieStore = cookies();
   const token = cookieStore.get("token")?.value;
-  const user = token && (await getCurrentUser(token)).data;
   const tags = await getTags();
 
   return (
@@ -33,7 +32,6 @@ export default async function Home({
               fetchUrl="/articles"
               optionals={searchParams}
               token={token}
-              currentUser={user}
               commentType={CommentType.FeedComment}
             />
           </Col>

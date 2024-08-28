@@ -41,7 +41,7 @@ export default function CardPostFooter({
       <div className="d-flex text-center border-top border-bottom align-items-center">
         <div className="flex-grow-1">
           <div className="btn" onClick={handleOnclickLike}>
-            {article.favoritesCount ? (
+            {article.favorited ? (
               <HeartFilled style={{ color: "red" }} />
             ) : (
               <HeartOutlined />
