@@ -55,7 +55,7 @@ export default function ProfilePage({
             setFeedContent(content);
             setLoading(false);
         })();
-    }, []);
+    }, [profile]);
 
     useEffect(() => {
         (async function () {
@@ -63,7 +63,7 @@ export default function ProfilePage({
             setProfile(data.profile);
             // setLoading(false);
         })();
-    }, [user]);
+    }, [username]);
 
     const handleFollowChange = async () => {
         if (follow) {
