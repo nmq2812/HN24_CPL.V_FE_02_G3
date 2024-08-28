@@ -1,5 +1,6 @@
 "use client";
 
+<<<<<<< HEAD
 import {
     Card,
     Col,
@@ -10,16 +11,18 @@ import {
     Tag,
     Tooltip,
 } from "antd";
+=======
+import { Input, List, Tag, Tooltip } from "antd";
+>>>>>>> parent of 5d8be52 (Merge pull request #28 from nmq2812/mquang)
 import { SearchOutlined } from "@ant-design/icons";
-import { ChangeEvent, useEffect, useState, useCallback } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { ChangeEvent, useEffect, useState } from "react";
 import { getTags } from "@/actions/handleTags";
-
-const PAGE_SIZE = 20;
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const TagList: React.FC = () => {
     const [searchValue, setSearchValue] = useState<string>("");
     const [selectedTag, setSelectedTag] = useState<string | null>(null);
+<<<<<<< HEAD
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [tags, setTags] = useState<string[]>([]);
 
@@ -89,18 +92,85 @@ const TagList: React.FC = () => {
                 }}
             >
                 {currentTags.map((tag) => (
+=======
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const current = new URLSearchParams(Array.from(searchParams));
+
+    const [tags, setTags] = useState<string[]>();
+
+    useEffect(() => {
+        if (selectedTag) {
+            current.set("tag", selectedTag);
+            const query = `?${current.toString()}`;
+            router.push(`${pathname}${query}`);
+        } else {
+            router.push("/");
+        }
+    }, [selectedTag]);
+
+    useEffect(() => {
+        getTags().then((tags) => {
+            setTags(tags);
+        });
+    }, []);
+
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearchValue(e.target.value);
+    };
+
+    const handleTagClick = (tag: string) => {
+        tag !== selectedTag ? setSelectedTag(tag) : setSelectedTag(null);
+    };
+
+    const filteredTags = tags?.filter(
+        (tag) => tag.includes(searchValue) && tag !== ""
+    );
+
+    return (
+        <div className="">
+            <Input
+                placeholder="Search tag"
+                prefix={<SearchOutlined />}
+                value={searchValue}
+                onChange={handleSearch}
+            />
+
+            <List
+                size="large"
+                dataSource={filteredTags}
+                grid={{ gutter: 16, column: 5, xs: 1, xl: 6 }}
+                pagination={{
+                    onChange: (page) => {
+                        console.log(page);
+                    },
+                    pageSize: filteredTags?.length!! / 10,
+                    showSizeChanger: false,
+                    size: "small",
+                }}
+                renderItem={(tag) => (
+>>>>>>> parent of 5d8be52 (Merge pull request #28 from nmq2812/mquang)
                     <Tooltip title={tag} key={tag}>
                         <Tag
                             color={selectedTag === tag ? "blue" : "default"}
                             onClick={() => handleTagClick(tag)}
                             style={{
                                 cursor: "pointer",
+<<<<<<< HEAD
                                 height: "1.4rem",
+=======
+                                marginBottom: 8,
+                                padding: 0,
+                                width: "100%",
+                                textAlign: "center",
+>>>>>>> parent of 5d8be52 (Merge pull request #28 from nmq2812/mquang)
                             }}
                         >
                             {tag}
                         </Tag>
                     </Tooltip>
+<<<<<<< HEAD
                 ))}
             </div>
             <Pagination
@@ -114,6 +184,12 @@ const TagList: React.FC = () => {
                 simple
             />
         </Card>
+=======
+                )}
+                style={{ marginTop: 16 }}
+            ></List>
+        </div>
+>>>>>>> parent of 5d8be52 (Merge pull request #28 from nmq2812/mquang)
     );
 };
 

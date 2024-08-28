@@ -1,20 +1,11 @@
 "use client";
 
-import { getSingleArticle } from "@/actions/handleArticle";
+import { getClickedArticle } from "@/actions/handleArticle";
 import { handleLike, handleUnlike } from "@/actions/handleLike";
-import {
-  getComment,
-  deleteComment,
-  postComent,
-} from "@/actions/handleComments";
-import {
-  LikeOutlined,
-  LikeFilled,
-  DeleteOutlined,
-  SendOutlined,
-  UserAddOutlined,
-} from "@ant-design/icons";
+import { getComment, deleteComment, postComent } from "@/actions/handleComments";
+import { LikeOutlined, LikeFilled, DeleteOutlined, SendOutlined, UserAddOutlined } from "@ant-design/icons";
 import { Space, Avatar, Typography, Button, List, Input, Spin } from "antd";
+import { Comments } from "@/types/comments";
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/auth";
@@ -26,7 +17,11 @@ function Post({ params }: { params: { slug: string } }) {
     const [article, setArticle] = useState<Article>();
     const [commentText, setCommentText] = useState("");
 
+<<<<<<< HEAD
     const [comments, setComments] = useState<Comment[]>([]);
+=======
+    const [comments, setComments] = useState<Comments[]>([]);
+>>>>>>> parent of 5d8be52 (Merge pull request #28 from nmq2812/mquang)
 
     const [like, setLike] = useState(article?.favorited);
 
@@ -37,7 +32,11 @@ function Post({ params }: { params: { slug: string } }) {
         if (typeof slug === "string") {
             (async function () {
                 const [result, fetchedComments] = await Promise.all([
+<<<<<<< HEAD
                     getSingleArticle(slug, token!!),
+=======
+                    getClickedArticle(slug, token!!),
+>>>>>>> parent of 5d8be52 (Merge pull request #28 from nmq2812/mquang)
                     getComment(slug),
                 ]);
                 setArticle(result.article);

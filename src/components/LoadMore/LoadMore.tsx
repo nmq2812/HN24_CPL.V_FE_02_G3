@@ -19,6 +19,9 @@ export default function LoadMore({
     const { ref, inView } = useInView();
     const [page, setPage] = useState<number | null>(2);
     const [data, setData] = useState<Article[]>([]);
+    const { ref, inView } = useInView();
+    const [page, setPage] = useState<number | null>(2);
+    const [data, setData] = useState<Article[]>([]);
 
     useEffect(() => {
         if (inView) {

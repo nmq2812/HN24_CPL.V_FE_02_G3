@@ -13,11 +13,12 @@
   justify-content: center;
   font-size: 1.5rem;
   border-radius: 50%;
+  background: rgba(28, 17, 41, 0.88);
 }
 
 .menuBar {
   height: 88vh;
-  margin-top: 1rem;
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   gap: 15px;

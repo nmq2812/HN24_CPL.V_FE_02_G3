@@ -1,7 +1,7 @@
 "use server";
 import "./page.module.css";
 import "antd/dist/reset.css";
-import { Col, Layout, Row } from "antd";
+import { Layout, Row, Col } from "antd";
 import Feed from "@/components/Feed/Feed";
 import { Content } from "antd/es/layout/layout";
 import TagList from "@/components/tagList";

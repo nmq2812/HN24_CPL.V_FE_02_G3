@@ -35,6 +35,7 @@ export async function putUser(
             );
         }
 
+        console.log("User updated successfully");
     } catch (error) {
         console.error("Error updating user settings:", error);
         throw error;

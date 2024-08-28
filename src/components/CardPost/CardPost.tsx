@@ -1,34 +1,17 @@
 "use client";
 import { Card } from "antd";
+
 import CardPostHeader from "./CardPostHeader";
 import CardPostContent from "./CardPostContent";
-import CardPostFooter from "./CardPostFooter";
-import { CommentType } from "@/types/enums";
 
-export default function CardPost({
-  article,
-  currentUser,
-}: {
-  article: Article;
-  currentUser?: Profile;
-}) {
-  const isMe =
-    currentUser!! && currentUser.username === article.author.username;
+export default function CardPost({ article }: { article: Article }) {
   return (
-    <>
-      <Card>
-        <CardPostHeader
-          slug={article.slug}
-          author={article.author}
-          updatedAt={article.updatedAt}
-          isMe={isMe}
-        ></CardPostHeader>
-        <CardPostContent article={article}></CardPostContent>
-        <CardPostFooter
-          article={article}
-          commentType={CommentType.FeedComment}
-        ></CardPostFooter>
-      </Card>
-    </>
+    <Card>
+      <CardPostHeader
+        author={article.author}
+        updatedAt={article.updatedAt}
+      ></CardPostHeader>
+      <CardPostContent article={article}></CardPostContent>
+    </Card>
   );
 }

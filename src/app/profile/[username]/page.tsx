@@ -1,6 +1,11 @@
 "use client";
+<<<<<<< HEAD
 
 import { Avatar, Button, Card, Col, Layout, MenuProps, Row, Spin } from "antd";
+=======
+import { Avatar, Button, Card, Layout } from "antd";
+import Link from "antd/es/typography/Link";
+>>>>>>> parent of 5d8be52 (Merge pull request #28 from nmq2812/mquang)
 import { getProfile } from "@/actions/handleProfile";
 import { useAuth } from "@/contexts/auth";
 import { ReactNode, useEffect, useMemo, useState } from "react";
