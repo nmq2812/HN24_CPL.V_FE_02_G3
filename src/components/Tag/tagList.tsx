@@ -31,10 +31,8 @@ export default function TagList({
   const pathname = usePathname();
 
   useEffect(() => {
-    console.log(searchParams);
     const query = new URLSearchParams(searchParams as any);
     const tag = query.get("tag");
-    console.log(tag);
     setSelectedTag(tag);
   }, [searchParams]);
 

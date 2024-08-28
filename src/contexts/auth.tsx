@@ -18,6 +18,7 @@ interface AuthContextType {
   user: Profile | undefined;
   loading: boolean;
   login: (user: Profile) => void;
+  update: (user: Profile) => void;
   logout: () => void;
 }
 
@@ -35,7 +36,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (cookies.isAuthenticated === "true" && token && !isExpired(token)) {
         try {
           const userResult = await getCurrentUser(token);
-          console.log("hello cập nhật");
           if (userResult.success) {
             const username = userResult.data.username;
             const profileResult = await getProfile(username);
@@ -86,7 +86,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => {
-    console.log("hello logout");
     setUser(undefined);
     destroyCookie(null, "isAuthenticated");
     destroyCookie(null, "token");
@@ -95,8 +94,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     route.push("/");
   };
 
+  const update = (newuser: Profile) => {
+    login(newuser);
+    route.push("/");
+  };
+
   const contextValue = useMemo(
-    () => ({ user, loading, login, logout }),
+    () => ({ user, loading, update, login, logout }),
     [user, loading]
   );
 

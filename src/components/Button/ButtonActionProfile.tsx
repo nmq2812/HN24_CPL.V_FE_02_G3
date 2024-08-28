@@ -1,5 +1,6 @@
 "use client";
 import { followUser, unfollowUser } from "@/actions/handleFollow";
+import { TruncateText } from "@/ultis/TruncateText";
 import { EditOutlined, UserAddOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -31,11 +32,12 @@ export default function ButtonActionProfile({
   return (
     <div className="btn btn-primary rounded">
       {isMe ? (
-        <div>
-          <Link href="/settings">
-            <EditOutlined /> Edit Profile Settings
-          </Link>
-        </div>
+        <Link
+          href="/settings"
+          style={{ color: "inherit", textDecoration: "none" }}
+        >
+          <EditOutlined /> Edit Profile Settings
+        </Link>
       ) : (
         <div onClick={handleClickFollow}>
           {" "}

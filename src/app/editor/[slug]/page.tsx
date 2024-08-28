@@ -2,7 +2,6 @@ import FormUpdateArticle from "@/components/Form/FormArticle";
 
 const UpdateArticle = ({ params }: { params: { slug: string } }) => {
   const slug = params.slug;
-  console.log(slug);
 
   return (
     <div className="editor-page">
