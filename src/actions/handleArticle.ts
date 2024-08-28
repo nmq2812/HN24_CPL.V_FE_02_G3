@@ -117,7 +117,8 @@ export const deleteArticle = async (slug: string, token: string) => {
         },
       }
     );
-
+    
+    revalidateTag("list-articles");
     const res = await response.json();
     if (response.status === 200) {
       redirect("/");

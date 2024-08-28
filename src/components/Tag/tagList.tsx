@@ -62,7 +62,9 @@ export default function TagList({
   const filteredTags = tags.filter((tag) => tag.includes(searchValue));
   const indexOfLastTag = currentPage * PAGE_SIZE;
   const indexOfFirstTag = indexOfLastTag - PAGE_SIZE;
-  const currentTags = filteredTags.slice(indexOfFirstTag, indexOfLastTag);
+  const currentTags = filteredTags
+      .slice(indexOfFirstTag, indexOfLastTag)
+      .filter((tag) => tag !== "");
 
   return (
     <Card title="Tags">

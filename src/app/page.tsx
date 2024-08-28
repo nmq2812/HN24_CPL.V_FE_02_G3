@@ -4,7 +4,7 @@ import "antd/dist/reset.css";
 import { Col, Layout, Row } from "antd";
 import Feed from "@/components/Feed/Feed";
 import { Content } from "antd/es/layout/layout";
-import TagList from "@/components/Tag/TagList";
+import TagList from "@/components/Tag/tagList";
 import { cookies } from "next/headers";
 
 import { getCurrentUser } from "@/actions/authAction";
