@@ -59,12 +59,12 @@ export default function TagList({
     setSelectedTag((prevTag) => (prevTag === tag ? null : tag));
   }, []);
 
-  const filteredTags = tags.filter((tag) => tag.includes(searchValue));
+  const filteredTags = tags.filter(
+      (tag) => tag.includes(searchValue) && tag !== ""
+  );
   const indexOfLastTag = currentPage * PAGE_SIZE;
   const indexOfFirstTag = indexOfLastTag - PAGE_SIZE;
-  const currentTags = filteredTags
-      .slice(indexOfFirstTag, indexOfLastTag)
-      .filter((tag) => tag !== "");
+  const currentTags = filteredTags.slice(indexOfFirstTag, indexOfLastTag);
 
   return (
     <Card title="Tags">

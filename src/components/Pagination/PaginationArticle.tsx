@@ -20,18 +20,18 @@ export default function PaginationArticle({
     router.push(`?${params.toString()}`);
   };
   return (
-    <>
-      <Pagination
-        align="center"
-        defaultCurrent={1}
-        current={currentPage}
-        total={total}
-        pageSize={10}
-        onChange={onChangePage}
-        showSizeChanger={false}
-        hideOnSinglePage={true}
-        simple
-      />
-    </>
+      <>
+          <Pagination
+              align="center"
+              defaultCurrent={1}
+              current={currentPage}
+              total={total}
+              pageSize={Number(process.env.NEXT_PUBLIC_LIMIT_ARTICLE)}
+              onChange={onChangePage}
+              showSizeChanger={false}
+              hideOnSinglePage={true}
+              simple
+          />
+      </>
   );
 }

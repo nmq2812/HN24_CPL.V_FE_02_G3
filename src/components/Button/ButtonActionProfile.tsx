@@ -16,34 +16,34 @@ export default function ButtonActionProfile({
   token?: string;
 }) {
   const router = useRouter();
-  const handleClickFollow = () => {
-    if (token) {
-      if (profile.following) {
-        unfollowUser(profile.username, token);
+  const handleClickFollow = async () => {
+      if (token) {
+          if (profile.following) {
+              console.log(await unfollowUser(profile.username, token));
+          } else {
+              console.log(await followUser(profile.username, token));
+          }
       } else {
-        followUser(profile.username, token);
+          toast.error("You need login to do more");
+          router.push("/login");
       }
-    } else {
-      toast.error("You need login to do more");
-      router.push("/login");
-    }
   };
 
   return (
-    <div className="btn btn-primary rounded">
-      {isMe ? (
-        <Link
-          href="/settings"
-          style={{ color: "inherit", textDecoration: "none" }}
-        >
-          <EditOutlined /> Edit Profile Settings
-        </Link>
-      ) : (
-        <div onClick={handleClickFollow}>
-          {" "}
-          <UserAddOutlined /> {profile.following ? "Followed" : "Follow"}
-        </div>
-      )}
-    </div>
+      <div className="btn btn-primary rounded">
+          {isMe ? (
+              <Link
+                  href="/settings"
+                  style={{ color: "inherit", textDecoration: "none" }}
+              >
+                  <EditOutlined /> Edit Profile Settings
+              </Link>
+          ) : (
+              <div onClick={handleClickFollow}>
+                  <UserAddOutlined />{" "}
+                  {profile.following ? "Followed" : "Follow"}
+              </div>
+          )}
+      </div>
   );
 }
