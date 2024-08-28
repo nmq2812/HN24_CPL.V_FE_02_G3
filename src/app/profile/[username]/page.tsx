@@ -29,10 +29,11 @@ const items: MenuItem[] = [
 ];
 
 export default function ProfilePage({
+
     params,
+
 }: {
     params: { username: string };
-}) {
     const username = params.username;
     const [loading, setLoading] = useState(true);
     const [feedContent, setFeedContent] = useState<JSX.Element | null>(null);
@@ -192,3 +193,4 @@ export default function ProfilePage({
         </Layout>
     );
 }
+
