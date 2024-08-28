@@ -1,29 +1,64 @@
 "use client";
 import { Button, FormProps, Input, Form, Tag } from "antd";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/auth";
-import { postArticle } from "@/actions/handleArticle";
+import {
+  getSingleArticle,
+  postArticle,
+  putArticle,
+} from "@/actions/handleArticle";
 import { capitalizeFirstLetter } from "@/ultis/formatText";
 import toast from "react-hot-toast";
 import { PlusOutlined } from "@ant-design/icons";
 
-type ValueType = string | null;
-
-const FormNewArticle = () => {
+const UpdateOrAddArticle = ({ slug }: { slug?: string }) => {
   const router = useRouter();
   const { user } = useAuth();
+  const [form] = Form.useForm();
   const [tags, setTags] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleFinish: FormProps<ArticleCredentials>["onFinish"] = (values) => {
+  useEffect(() => {
+    (async () => {
+      if (slug) {
+        console.log(slug);
+        try {
+          const res = await getSingleArticle(slug, user?.token!!);
+          if (res) {
+            form.setFieldsValue({
+              title: res.data.title,
+              description: res.data.description,
+              body: res.data.body,
+              tagList: res.data.tagList || [],
+            });
+            setTags(res.data.tagList || []);
+          }
+        } catch (error) {
+          toast.error("Something went wrong");
+        }
+      }
+    })();
+  }, [slug, user?.token, form]);
+
+  const saveArticle = async (values: ArticleCredentials) => {
+    if (slug) {
+      return await putArticle(values, slug, user?.token!!);
+    } else {
+      return await postArticle(values, user?.token!!);
+    }
+  };
+
+  const handleFinish: FormProps<ArticleCredentials>["onFinish"] = async (
+    values
+  ) => {
     values.tagList = tags;
-    console.log(values);
     setLoading(true);
-    postArticle(values, user?.token!!).then((result) => {
+    try {
+      const result = await saveArticle(values);
       if (result.success) {
-        toast.success("Create article successfully");
+        toast.success("Handle article successfully");
         router.replace(`/article/${result.data.slug}`);
       } else {
         const errors = result.message.errors;
@@ -33,7 +68,11 @@ const FormNewArticle = () => {
         }
       }
       setLoading(false);
-    });
+    } catch (error) {
+      toast.error("An error occurred while saving the article.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleInputTag = () => {
@@ -49,6 +88,7 @@ const FormNewArticle = () => {
 
   return (
     <Form
+      form={form}
       name="article-form"
       size="large"
       layout="vertical"
@@ -94,11 +134,17 @@ const FormNewArticle = () => {
             onPressEnter={handleInputTag}
             suffix={<PlusOutlined />}
           />
-          {tags.map((tag) => (
-            <Tag key={tag} closable onClose={() => handleClose(tag)}>
-              {tag}
-            </Tag>
-          ))}
+          <div className="mt-1 border rounded bg-white p-2">
+            {tags.length > 0 ? (
+              tags.map((tag) => (
+                <Tag key={tag} closable onClose={() => handleClose(tag)}>
+                  {tag}
+                </Tag>
+              ))
+            ) : (
+              <div className="fw-lighter text-muted">Selected tags</div>
+            )}
+          </div>
         </div>
       </Form.Item>
 
@@ -111,4 +157,4 @@ const FormNewArticle = () => {
   );
 };
 
-export default FormNewArticle;
+export default UpdateOrAddArticle;

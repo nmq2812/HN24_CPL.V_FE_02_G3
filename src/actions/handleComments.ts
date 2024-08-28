@@ -1,4 +1,7 @@
 "use server";
+
+import { revalidateTag } from "next/cache";
+
 const NEXT_PUBLIC_BASE_BACKEND_URL =
   "https://node-express-conduit.appspot.com/api";
 
@@ -40,6 +43,7 @@ export const deleteComment = async (
       }
     );
 
+    revalidateTag("comment");
     if (!(await response).ok) {
       throw new Error("Failed to fetch comments");
     }
@@ -48,7 +52,11 @@ export const deleteComment = async (
   }
 };
 
-export const postComent = async (slug: string, token: string, body: string) => {
+export const postComment = async (
+  slug: string,
+  token: string,
+  body: string
+) => {
   try {
     const response = fetch(
       `${NEXT_PUBLIC_BASE_BACKEND_URL}/articles/${slug}/comments`,
@@ -70,6 +78,7 @@ export const postComent = async (slug: string, token: string, body: string) => {
       throw new Error("Failed to fetch comments");
     }
 
+    revalidateTag("comment");
     const data = await (await response).json();
     return data.comment;
   } catch (error) {

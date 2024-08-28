@@ -1,18 +1,19 @@
-import FormNewArticle from "@/components/Form/FormArticle";
+import FormUpdateArticle from "@/components/Form/FormArticle";
 
-const NewArticle = ({ params }: { params: { slug: string } }) => {
+const UpdateArticle = ({ params }: { params: { slug: string } }) => {
   const slug = params.slug;
+  console.log(slug);
 
   return (
     <div className="editor-page">
       <div className="container page">
         <div className="row">
           <div className="col-md-10 offset-md-1 col-xs-12">
-            <FormNewArticle />
+            <FormUpdateArticle slug={slug} />
           </div>
         </div>
       </div>
     </div>
   );
 };
-export default NewArticle;
+export default UpdateArticle;

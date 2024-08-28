@@ -3,6 +3,7 @@ import Link from "next/link";
 import { formatDate } from "@/ultis/formatTime";
 import { Avatar, Dropdown, MenuProps } from "antd";
 import {
+  DeleteOutlined,
   EditOutlined,
   ProfileOutlined,
   UserAddOutlined,
@@ -11,20 +12,23 @@ import { followUser, unfollowUser } from "@/actions/handleFollow";
 import { useAuth } from "@/contexts/auth";
 import { useState } from "react";
 import { TruncateText } from "@/ultis/TruncateText";
+import { CommentType } from "@/types/enums";
 
 export default function CardPostHeader({
   author,
   updatedAt,
-  isMe,
   slug,
+  commentType,
 }: {
   author: Profile;
   updatedAt: string;
-  isMe: boolean;
   slug: string;
+  commentType: CommentType;
 }) {
   const { user } = useAuth();
   const [follow, setFollow] = useState(author.following);
+  const isMe = user!! && user.username === author.username;
+  const isDetail = commentType === CommentType.DetailComment;
 
   const handleFollow = () => {
     if (follow) {
@@ -41,7 +45,7 @@ export default function CardPostHeader({
       label: (
         <Link href={`/article/${slug}`}>
           {" "}
-          <ProfileOutlined /> Xem chi tiết
+          <ProfileOutlined /> Detail
         </Link>
       ),
     },
@@ -56,13 +60,25 @@ export default function CardPostHeader({
     },
   ];
 
+  if (isDetail) {
+    items.shift();
+  }
+
   if (isMe) {
     items.pop();
     items.push({
       key: "edit",
       label: (
-        <div>
+        <Link href={`/editor/${slug}`}>
           <EditOutlined /> Edit
+        </Link>
+      ),
+    });
+    items.push({
+      key: "delete",
+      label: (
+        <div>
+          <DeleteOutlined /> Delete
         </div>
       ),
     });

@@ -1,4 +1,4 @@
 export enum CommentType {
-  ModalComment = "ModalComment",
+  DetailComment = "DetailComment",
   FeedComment = "FeedComment",
 }

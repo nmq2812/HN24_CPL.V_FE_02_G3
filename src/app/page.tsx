@@ -3,10 +3,11 @@ import "antd/dist/reset.css";
 import { Col, Layout, Row } from "antd";
 import Feed from "@/components/Feed/Feed";
 import { Content } from "antd/es/layout/layout";
-import TagList from "@/components/tagList";
+import TagList from "@/components/Tag/tagList";
 import { cookies } from "next/headers";
 import { getCurrentUser } from "@/actions/authAction";
-import NewPost from "@/components/NewPost";
+import { getTags } from "@/actions/handleTags";
+import { CommentType } from "@/types/enums";
 
 export default async function Home({
   searchParams,
@@ -16,6 +17,7 @@ export default async function Home({
   const cookieStore = cookies();
   const token = cookieStore.get("token")?.value;
   const user = token && (await getCurrentUser(token)).data;
+  const tags = await getTags();
 
   return (
     <Layout
@@ -30,10 +32,11 @@ export default async function Home({
               optionals={searchParams}
               token={token}
               currentUser={user}
+              commentType={CommentType.FeedComment}
             />
           </Col>
           <Col className="tags order-first order-lg-0" xs={24} lg={8}>
-            <TagList />
+            <TagList searchParams={searchParams} tags={tags} />
           </Col>
         </Row>
       </Content>

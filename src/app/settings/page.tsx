@@ -58,7 +58,6 @@ const SettingsPage: React.FC = () => {
                 image: image!!,
                 following: user?.following,
             });
-            console.log(user);
         } catch (error) {
             toast.error("failed");
 
