@@ -1,3 +1,4 @@
+"use server";
 import "./page.module.css";
 import "antd/dist/reset.css";
 import { Col, Layout, Row } from "antd";

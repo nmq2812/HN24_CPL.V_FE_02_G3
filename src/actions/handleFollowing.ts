@@ -2,7 +2,7 @@
 
 export const handleFollow = async (username: string, token: string) => {
     try {
-        const response = await fetch(
+        fetch(
             `https://node-express-conduit.appspot.com/api/profiles/${username}/follow`,
             {
                 method: "POST",
