@@ -94,22 +94,22 @@ export default function CardPostHeader({
             <TruncateText text={author.username} maxLength={10} />
           </Link>
 
-                    <div
-                        className="date fw-lighter text-muted"
-                        style={{ fontSize: "0.6rem" }}
-                    >
-                        {formatDate(updatedAt)}
-                    </div>
-                </div>
-            </div>
-            <Dropdown menu={{ items }}>
-                <div
-                    className="d-flex align-items-center btn btn-light fs-3 rounded-circle justify-content-center"
-                    style={{ width: "40px", height: "40px" }}
-                >
-                    <div className="pb-3">...</div>
-                </div>
-            </Dropdown>
+          <div
+            className="date fw-lighter text-muted"
+            style={{ fontSize: "0.6rem" }}
+          >
+            {formatDate(updatedAt)}
+          </div>
         </div>
-    );
+      </div>
+      <Dropdown menu={{ items }}>
+        <div
+          className="d-flex align-items-center btn btn-light fs-3 rounded-circle justify-content-center"
+          style={{ width: "40px", height: "40px" }}
+        >
+          <div className="pb-3">...</div>
+        </div>
+      </Dropdown>
+    </div>
+  );
 }

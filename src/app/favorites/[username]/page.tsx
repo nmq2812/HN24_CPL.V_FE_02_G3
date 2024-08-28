@@ -2,8 +2,9 @@ import Feed from "@/components/Feed/Feed";
 import { Col, Layout, Row } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { cookies } from "next/headers";
-import TagList from "@/components/tagList";
+import TagList from "@/components//Tag/tagList";
 import { getCurrentUser } from "@/actions/authAction";
+import { CommentType } from "@/types/enums";
 
 async function FavoritesPage({
     searchParams,
@@ -30,7 +31,7 @@ async function FavoritesPage({
                             fetchUrl="/articles"
                             optionals={searchParams}
                             token={token}
-                            currentUser={user}
+                            commentType={CommentType.DetailComment}
                         />
                     </Col>
                     <Col className="tags order-first order-lg-0" xs={24} lg={8}>

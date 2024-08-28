@@ -4,34 +4,33 @@ import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 const NEXT_PUBLIC_BASE_BACKEND_URL =
-    "https://node-express-conduit.appspot.com/api";
+  "https://node-express-conduit.appspot.com/api";
 
 export const getArticles = async (
-    fetchUrl: string,
-    { limit, page, tag, author, favorited }: OptionalArticleParams,
-    token?: string
+  fetchUrl: string,
+  { limit, page, tag, author, favorited }: OptionalArticleParams,
+  token?: string
 ) => {
-    try {
-        //Query
-        const queryParams = new URLSearchParams({
-            limit: limit.toString(),
-            page: page.toString(),
-            ...(author && { author }),
-            ...(favorited && { favorited }),
-            ...(tag && { tag }),
-        });
-        const url = NEXT_PUBLIC_BASE_BACKEND_URL + fetchUrl + "?" + queryParams;
+  try {
+    //Query
+    const queryParams = new URLSearchParams({
+      limit: limit.toString(),
+      page: page.toString(),
+      ...(author && { author }),
+      ...(favorited && { favorited }),
+      ...(tag && { tag }),
+    });
+    const url = NEXT_PUBLIC_BASE_BACKEND_URL + fetchUrl + "?" + queryParams;
 
-        //Fetch data
-        const response = await fetch(url, {
-            method: "GET",
-            headers: { Authorization: token ? `Bearer ${token}` : "" },
-            next: { tags: ["list-articles"] },
-        });
-        const res = await response.json();
-        const nextPage =
-            res.articlesCount >
-            Number(process.env.NEXT_PUBLIC_LIMIT_ARTICLE) * page;
+    //Fetch data
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { Authorization: token ? `Bearer ${token}` : "" },
+      next: { tags: ["list-articles"] },
+    });
+    const res = await response.json();
+    const nextPage =
+      res.articlesCount > Number(process.env.NEXT_PUBLIC_LIMIT_ARTICLE) * page;
 
     return { success: true, data: res, nextPage: nextPage };
     // }
@@ -74,41 +73,38 @@ export const getSingleArticle = async (slug: string, token?: string) => {
 };
 
 export const postArticle = async (
-    article: ArticleCredentials,
-    token: string
+  article: ArticleCredentials,
+  token: string
 ) => {
-    try {
-        const response = await fetch(
-            `${NEXT_PUBLIC_BASE_BACKEND_URL}/articles`,
-            {
-                method: "POST",
-                body: JSON.stringify({ article }),
-                headers: {
-                    Authorization: token ? `Bearer ${token}` : "",
-                    "Content-Type": "application/json",
-                },
-            }
-        );
+  try {
+    const response = await fetch(`${NEXT_PUBLIC_BASE_BACKEND_URL}/articles`, {
+      method: "POST",
+      body: JSON.stringify({ article }),
+      headers: {
+        Authorization: token ? `Bearer ${token}` : "",
+        "Content-Type": "application/json",
+      },
+    });
 
-        const res = await response.json();
-        if (response.status === 200) {
-            return { success: true, data: res.article };
-        } else {
-            if (response.status === 401 || response.status === 422) {
-                return { success: false, message: res };
-            } else {
-                return {
-                    success: false,
-                    message: { errors: { message: "Unexpected error" } },
-                };
-            }
-        }
-    } catch (error) {
+    const res = await response.json();
+    if (response.status === 200) {
+      return { success: true, data: res.article };
+    } else {
+      if (response.status === 401 || response.status === 422) {
+        return { success: false, message: res };
+      } else {
         return {
-            success: false,
-            message: { errors: { message: "An error occurred" } },
+          success: false,
+          message: { errors: { message: "Unexpected error" } },
         };
+      }
     }
+  } catch (error) {
+    return {
+      success: false,
+      message: { errors: { message: "An error occurred" } },
+    };
+  }
 };
 
 export const deleteArticle = async (slug: string, token: string) => {
