@@ -12,3 +12,16 @@ html {
 .ant-card-meta-description {
   line-height: 10px;
 }
+
+.tags {
+  padding: 0px;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 80px;
+}
+
+@media (max-width: 992px) {
+  .tags {
+    position: static !important;
+  }
+}

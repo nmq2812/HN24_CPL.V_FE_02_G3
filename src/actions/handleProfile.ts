@@ -1,15 +1,12 @@
 "use server";
 
-export const getProfile = async (username: string, token?: string) => {
+export const getProfile = async (username: string) => {
     try {
         const response = await fetch(
             `https://node-express-conduit.appspot.com/api/profiles/${username}`,
             {
                 method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: token ? `Bearer ${token}` : "",
-                },
+                headers: { "Content-Type": "application/json" },
             }
         );
         return response.json();
