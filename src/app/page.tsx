@@ -1,3 +1,4 @@
+"use server";
 import "./page.module.css";
 import "antd/dist/reset.css";
 import { Col, Layout, Row } from "antd";
@@ -5,6 +6,7 @@ import Feed from "@/components/Feed/Feed";
 import { Content } from "antd/es/layout/layout";
 import TagList from "@/components/Tag/tagList";
 import { cookies } from "next/headers";
+
 import { getCurrentUser } from "@/actions/authAction";
 import { getTags } from "@/actions/handleTags";
 import { CommentType } from "@/types/enums";

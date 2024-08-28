@@ -1,6 +1,15 @@
 "use client";
 
-import { Card, Col, Input, List, Pagination, Tag, Tooltip } from "antd";
+import {
+  Card,
+  Col,
+  Input,
+  List,
+  Pagination,
+  Skeleton,
+  Tag,
+  Tooltip,
+} from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { ChangeEvent, useEffect, useState, useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
