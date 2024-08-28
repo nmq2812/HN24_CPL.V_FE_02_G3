@@ -1,18 +1,11 @@
-"use server";
-import "./page.module.css";
-import "antd/dist/reset.css";
-import { Col, Layout, Row } from "antd";
 import Feed from "@/components/Feed/Feed";
+import { Col, Layout, Row } from "antd";
 import { Content } from "antd/es/layout/layout";
-import TagList from "@/components/tagList";
 import { cookies } from "next/headers";
-
+import TagList from "@/components/tagList";
 import { getCurrentUser } from "@/actions/authAction";
-import NewPost from "@/components/NewPost";
 
-import FormNewPost from "@/components/FormNewPost";
-
-export default async function Home({
+async function FavoritesPage({
     searchParams,
 }: {
     searchParams?: { [key: string]: string | string[] | undefined };
@@ -21,6 +14,10 @@ export default async function Home({
     const token = cookieStore.get("token")?.value;
     const user = token && (await getCurrentUser(token)).data;
 
+    searchParams = {
+        ...searchParams,
+        favorited: user.username,
+    };
     return (
         <Layout
             className="col-12 col-lg-10 col-xl-8"
@@ -44,3 +41,5 @@ export default async function Home({
         </Layout>
     );
 }
+
+export default FavoritesPage;

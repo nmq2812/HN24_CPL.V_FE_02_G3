@@ -2,14 +2,13 @@
 
 export const handleFollow = async (username: string, token: string) => {
     try {
-        const response = await fetch(
+        fetch(
             `https://node-express-conduit.appspot.com/api/profiles/${username}/follow`,
             {
                 method: "POST",
                 headers: { Authorization: `Bearer ${token}` },
             }
         );
-        const res = await response.json();
     } catch (error) {
         throw error;
     }
@@ -18,7 +17,7 @@ export const handleFollow = async (username: string, token: string) => {
 export const handleUnfollow = (username: string, token: string) => {
     try {
         fetch(
-            `https://node-express-conduit.appspot.com/api/articles/${username}/follow`,
+            `https://node-express-conduit.appspot.com/api/profiles/${username}/follow`,
             {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${token}` },
