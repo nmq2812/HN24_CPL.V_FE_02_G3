@@ -1,5 +1,5 @@
 import { FireFilled } from "@ant-design/icons";
-import "@/style/sideBar.css";
+import "@/style/sidebar.css";
 
 export default function Logo() {
   return (
