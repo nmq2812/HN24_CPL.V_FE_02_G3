@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Layout, theme, Button, Drawer, Grid } from "antd";
 import { usePathname, useRouter } from "next/navigation";
-import "@/style/sideBar.css";
+import "@/style/sidebar.css";
 import Menu from "./Menu";
 import Logo from "./Logo";
 import Link from "next/link";
