@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
+    "@vercel/speed-insights": "^1.0.12",
     "antd": "^5.20.2",
     "conduit": "file:",
     "jwt-decode": "^4.0.0",
