@@ -39,15 +39,16 @@ export default async function ProfilePage({
         <div className="profile-page">
             <div className="user-info">
                 <div className="container">
-                    <Col className="justify-content-center align-center">
+                    <div className="text-center col-xs-12 col-md-10 offset-md-1 py-4">
                         <Avatar
+                            size={128}
                             src={profile?.image}
                             className="user-img"
                             alt="profile avatar"
                         />
-                        <h4>{profile?.username}</h4>
+                        <h4 className="fw-bold">{profile?.username}</h4>
                         <p className="pb-1">{profile?.bio}</p>
-                    </Col>
+                    </div>
                 </div>
             </div>
 
