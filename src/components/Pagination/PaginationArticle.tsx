@@ -26,7 +26,7 @@ export default function PaginationArticle({
         defaultCurrent={1}
         current={currentPage}
         total={total}
-        pageSize={10}
+        pageSize={Number(process.env.NEXT_PUBLIC_LIMIT_ARTICLE)}
         onChange={onChangePage}
         showSizeChanger={false}
         hideOnSinglePage={true}
